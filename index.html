@@ -6,250 +6,719 @@
 <title>Coview-Education — Chinh Phục Tiếng Nhật với AI</title>
 <meta name="description" content="Công cụ học tiếng Nhật AI hàng đầu. Luyện thi JLPT, ứng dụng gamified và trợ lý thông minh từ Coview-Education." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@300;400;700&display=swap" rel="stylesheet" />
 <style>
-:root{--bg:#07070e;--bg2:#0d0d1c;--bg3:#111127;--gold:#d4a853;--gold2:#f0c46a;--red:#e8392a;--cyan:#3dd9eb;--text:#e8e4d9;--muted:#6b6880;--border:rgba(212,168,83,0.15);}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
-#cursor{width:12px;height:12px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:difference;}
-#cursor-ring{width:36px;height:36px;border:1px solid rgba(212,168,83,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .12s ease,top .12s ease;}
-body:has(a:hover) #cursor,body:has(button:hover) #cursor{width:20px;height:20px;background:var(--red);}
-body::before{content:'';position:fixed;inset:0;z-index:9990;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:.35;}
+:root {
+  --cream: #fdf8f3;
+  --white: #ffffff;
+  --sakura: #f7c5cb;
+  --sakura2: #f0a0ad;
+  --sakura3: #e87d8f;
+  --sakura-deep: #c94f6a;
+  --navy: #1a2744;
+  --navy2: #253356;
+  --navy-light: #3a4f7a;
+  --gold: #c9a227;
+  --gold2: #e8be45;
+  --text: #1a1a2e;
+  --text2: #4a4a65;
+  --text3: #8888a0;
+  --border: rgba(201,162,39,0.15);
+  --sakura-border: rgba(248,197,203,0.4);
+  --shadow: 0 4px 30px rgba(26,39,68,0.06);
+  --shadow-md: 0 8px 40px rgba(26,39,68,0.1);
+  --shadow-lg: 0 16px 60px rgba(26,39,68,0.14);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
 
-/* ── LANG BUTTON ── */
-.lang-btn{display:flex;align-items:center;gap:7px;background:rgba(212,168,83,.08);border:1px solid var(--border);border-radius:50px;padding:7px 14px 7px 10px;cursor:none;transition:background .25s,border-color .25s;flex-shrink:0;}
-.lang-btn:hover{background:rgba(212,168,83,.18);border-color:rgba(212,168,83,.45);}
-.lang-flag{font-size:17px;line-height:1;}
-.lang-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
-.lang-arrow{font-size:9px;color:var(--muted);transition:transform .25s;display:inline-block;}
-.lang-btn:hover .lang-arrow{transform:rotate(180deg);}
+/* ── SAKURA PETALS ── */
+#sakura-canvas {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0.6;
+}
 
 /* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(7,7,14,.95),transparent);backdrop-filter:blur(12px);transition:padding .3s;}
-nav.scrolled{padding:14px 48px;background:rgba(7,7,14,.97);border-bottom:1px solid var(--border);}
-.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
-.nav-logo-mark{width:38px;height:38px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#fff;box-shadow:0 0 30px rgba(232,57,42,.4);}
-.nav-logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;letter-spacing:.08em;color:var(--text);text-transform:uppercase;}
-.nav-logo-text span{color:var(--gold);}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
-.nav-links a{text-decoration:none;color:var(--muted);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;transition:color .2s;position:relative;}
-.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width .3s;}
-.nav-links a:hover{color:var(--text);}
-.nav-links a:hover::after{width:100%;}
-.nav-right{display:flex;align-items:center;gap:16px;}
-.nav-cta{background:var(--gold);color:#07070e;padding:10px 22px;border-radius:2px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,transform .2s;}
-.nav-cta:hover{background:var(--gold2);transform:translateY(-1px);}
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  padding: 18px 60px;
+  display: flex; align-items:center; justify-content:space-between;
+  background: rgba(253,248,243,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--sakura-border);
+  transition: padding .3s, box-shadow .3s;
+}
+nav.scrolled {
+  padding: 14px 60px;
+  box-shadow: var(--shadow);
+}
+.nav-logo {
+  display: flex; align-items:center; gap:14px; text-decoration:none;
+}
+.nav-logo-mark {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--sakura-deep), var(--navy));
+  border-radius: 12px;
+  display: flex; align-items:center; justify-content:center;
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px; font-weight:700; color:#fff;
+  box-shadow: 0 4px 16px rgba(201,79,106,0.3);
+}
+.nav-logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight:700;
+  color: var(--navy);
+  letter-spacing: -.01em;
+}
+.nav-logo-text span { color: var(--sakura-deep); }
+.nav-links { display:flex; align-items:center; gap:36px; list-style:none; }
+.nav-links a {
+  text-decoration:none; color: var(--text2);
+  font-size: 13px; font-weight:500;
+  letter-spacing:.04em;
+  transition: color .2s;
+  position: relative;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:0; height:2px;
+  background: var(--sakura3);
+  border-radius: 2px;
+  transition: width .3s;
+}
+.nav-links a:hover { color: var(--sakura-deep); }
+.nav-links a:hover::after { width:100%; }
+.nav-right { display:flex; align-items:center; gap:14px; }
+.lang-btn {
+  display:flex; align-items:center; gap:7px;
+  background: transparent;
+  border: 1.5px solid var(--sakura-border);
+  border-radius: 50px; padding:7px 14px;
+  cursor: pointer;
+  transition: all .2s;
+  font-family:'Outfit',sans-serif;
+}
+.lang-btn:hover { border-color:var(--sakura3); background:rgba(247,197,203,0.1); }
+.lang-flag { font-size:16px; }
+.lang-label { font-size:11px; font-weight:700; letter-spacing:.1em; color:var(--navy); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--sakura-deep), var(--navy));
+  color:#fff; padding:11px 26px; border-radius:50px;
+  font-size:13px; font-weight:600;
+  text-decoration:none; letter-spacing:.02em;
+  transition: all .25s;
+  box-shadow: 0 4px 20px rgba(201,79,106,0.3);
+  white-space: nowrap;
+}
+.nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(201,79,106,0.4); }
 
 /* ── HERO ── */
-#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 48px 80px;position:relative;overflow:hidden;}
-.orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none;}
-.orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(212,168,83,.12),transparent 70%);top:-100px;left:-200px;animation:of1 12s ease-in-out infinite;}
-.orb2{width:500px;height:500px;background:radial-gradient(circle,rgba(232,57,42,.08),transparent 70%);bottom:-100px;right:-150px;animation:of2 15s ease-in-out infinite;}
-.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(61,217,235,.07),transparent 70%);top:40%;right:10%;animation:of1 18s ease-in-out infinite reverse;}
-@keyframes of1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,40px) scale(1.1);}}
-@keyframes of2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,20px) scale(1.08);}}
-.hk{position:absolute;font-family:'Cormorant Garamond',serif;color:rgba(212,168,83,.04);user-select:none;pointer-events:none;line-height:1;}
-.hk1{font-size:380px;font-weight:700;top:-60px;left:-20px;animation:kd 20s ease-in-out infinite;}
-.hk2{font-size:280px;font-weight:300;bottom:0;right:-30px;animation:kd 25s ease-in-out infinite reverse;}
-@keyframes kd{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-20px) rotate(2deg);}}
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;opacity:0;transform:translateY(20px);animation:fu .8s ease .2s forwards;}
-.eyebrow::before,.eyebrow::after{content:'';display:block;width:30px;height:1px;background:var(--gold);opacity:.5;}
-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(50px,8vw,108px);font-weight:300;line-height:.95;letter-spacing:-.02em;max-width:900px;opacity:0;transform:translateY(30px);animation:fu 1s ease .4s forwards;position:relative;z-index:1;}
-h1 em{font-style:italic;color:var(--gold);}
-.line-red{color:var(--red);}
-.hero-sub{font-size:16px;font-weight:300;color:var(--muted);line-height:1.7;max-width:540px;margin:28px auto 0;opacity:0;transform:translateY(20px);animation:fu .9s ease .7s forwards;position:relative;z-index:1;}
-.hero-acts{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:44px;opacity:0;transform:translateY(20px);animation:fu .9s ease .9s forwards;position:relative;z-index:1;}
-.btn-p{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#07070e;padding:15px 32px;border-radius:2px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:background .2s,transform .2s,box-shadow .2s;box-shadow:0 0 40px rgba(212,168,83,.25);}
-.btn-p:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 40px rgba(212,168,83,.4);}
-.btn-s{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);color:var(--text);padding:15px 32px;border-radius:2px;font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:border-color .2s,color .2s;}
-.btn-s:hover{border-color:var(--gold);color:var(--gold);}
-.hstats{display:flex;align-items:center;gap:48px;margin-top:80px;padding-top:48px;border-top:1px solid var(--border);opacity:0;animation:fu .9s ease 1.1s forwards;position:relative;z-index:1;}
-.sitem{text-align:center;}
-.snum{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;color:var(--gold);line-height:1;display:block;}
-.slbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block;}
-.ssep{width:1px;height:48px;background:var(--border);flex-shrink:0;}
-@keyframes fu{to{opacity:1;transform:translateY(0);}}
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding: 140px 60px 80px;
+  position: relative; overflow:hidden;
+  background: linear-gradient(160deg, #fff8fb 0%, var(--cream) 50%, #f5f0ff 100%);
+}
+#hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 800px 600px at 20% 30%, rgba(247,197,203,0.3), transparent),
+              radial-gradient(ellipse 600px 500px at 80% 70%, rgba(240,160,173,0.15), transparent),
+              radial-gradient(ellipse 400px 400px at 50% 90%, rgba(201,162,39,0.05), transparent);
+  pointer-events:none;
+}
+.hero-kanji {
+  position:absolute; font-family:'Noto Serif JP',serif;
+  color: rgba(201,79,106,0.04); pointer-events:none; user-select:none; line-height:1;
+}
+.hk1 { font-size:450px; font-weight:700; top:-80px; left:-60px; animation:kd 20s ease-in-out infinite; }
+.hk2 { font-size:300px; font-weight:300; bottom:-40px; right:-40px; animation:kd 25s ease-in-out infinite reverse; }
+@keyframes kd { 0%,100%{transform:translateY(0) rotate(-1deg);} 50%{transform:translateY(-20px) rotate(1deg);} }
 
-/* ── SECTIONS ── */
-section{padding:120px 48px;position:relative;}
-.wrap{max-width:1200px;margin:0 auto;}
-.slabel{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;}
-.slabel::before{content:'';width:24px;height:1px;background:var(--gold);}
-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,70px);font-weight:300;line-height:1.05;letter-spacing:-.02em;}
-h2 em{font-style:italic;color:var(--gold);}
+.eyebrow {
+  display:inline-flex; align-items:center; gap:12px;
+  font-size:11px; font-weight:600; letter-spacing:.22em; text-transform:uppercase;
+  color: var(--sakura-deep);
+  background: rgba(247,197,203,0.3);
+  border: 1px solid rgba(201,79,106,0.2);
+  padding: 8px 20px; border-radius:50px;
+  margin-bottom:32px;
+  opacity:0; transform:translateY(16px);
+  animation: fadeUp .7s ease .2s forwards;
+}
+.eyebrow-dot { width:5px; height:5px; background:var(--sakura3); border-radius:50%; }
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 7vw, 100px);
+  font-weight: 400; line-height:1.05;
+  letter-spacing: -.03em;
+  color: var(--navy);
+  max-width:900px;
+  opacity:0; transform:translateY(24px);
+  animation: fadeUp .9s ease .4s forwards;
+  position:relative; z-index:1;
+}
+h1 em { font-style:italic; color:var(--sakura-deep); }
+h1 .accent { 
+  position:relative; display:inline-block;
+}
+h1 .accent::after {
+  content:'';
+  position:absolute; bottom:4px; left:0; right:0;
+  height:3px;
+  background: linear-gradient(90deg, var(--sakura3), var(--gold));
+  border-radius:2px;
+  transform: scaleX(0);
+  animation: underlineGrow 1s ease 1.4s forwards;
+}
+@keyframes underlineGrow { to { transform:scaleX(1); } }
+
+.hero-sub {
+  font-size:17px; font-weight:300; color:var(--text2);
+  line-height:1.8; max-width:560px;
+  margin:28px auto 0;
+  opacity:0; transform:translateY(16px);
+  animation: fadeUp .8s ease .7s forwards;
+  position:relative; z-index:1;
+}
+.hero-acts {
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center;
+  margin-top:44px;
+  opacity:0; transform:translateY(16px);
+  animation: fadeUp .8s ease .9s forwards;
+  position:relative; z-index:1;
+}
+.btn-primary {
+  display:inline-flex; align-items:center; gap:10px;
+  background: linear-gradient(135deg, var(--sakura-deep), #9b2545);
+  color:#fff; padding:15px 34px; border-radius:50px;
+  font-family:'Outfit',sans-serif; font-size:14px; font-weight:600;
+  text-decoration:none; letter-spacing:.02em;
+  transition: all .25s;
+  box-shadow: 0 6px 28px rgba(201,79,106,0.35);
+  position:relative; overflow:hidden;
+}
+.btn-primary::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+}
+.btn-primary:hover { transform:translateY(-3px); box-shadow:0 12px 36px rgba(201,79,106,0.45); }
+.btn-secondary {
+  display:inline-flex; align-items:center; gap:10px;
+  border:2px solid var(--navy);
+  color: var(--navy); padding:13px 32px; border-radius:50px;
+  font-size:14px; font-weight:600;
+  text-decoration:none; letter-spacing:.02em;
+  transition: all .25s;
+}
+.btn-secondary:hover { background:var(--navy); color:#fff; transform:translateY(-2px); }
+
+.hero-stats {
+  display:flex; align-items:center; gap:60px;
+  margin-top:80px; padding-top:52px;
+  border-top:1px solid var(--sakura-border);
+  opacity:0; animation: fadeUp .8s ease 1.1s forwards;
+  position:relative; z-index:1;
+}
+.stat-item { text-align:center; }
+.stat-num {
+  font-family:'Playfair Display',serif;
+  font-size:44px; font-weight:700; color:var(--navy);
+  display:block; line-height:1;
+}
+.stat-num span { color:var(--sakura-deep); }
+.stat-lbl {
+  font-size:11px; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--text3); margin-top:8px; display:block;
+}
+.stat-sep { width:1px; height:52px; background:var(--sakura-border); flex-shrink:0; }
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
 /* ── MARQUEE ── */
-.mwrap{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 0;overflow:hidden;background:linear-gradient(to right,var(--bg),var(--bg2),var(--bg));}
-.mtrack{display:flex;gap:60px;width:max-content;animation:mq 30s linear infinite;}
-.mtrack:hover{animation-play-state:paused;}
-.mitem{display:flex;align-items:center;gap:12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);white-space:nowrap;flex-shrink:0;}
-.mitem .dot{width:5px;height:5px;background:var(--gold);border-radius:50%;}
-@keyframes mq{to{transform:translateX(-50%);}}
+.marquee-wrap {
+  background: var(--navy);
+  padding:16px 0; overflow:hidden;
+  border-top:3px solid var(--sakura3);
+}
+.marquee-track {
+  display:flex; gap:48px; width:max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee-track:hover { animation-play-state:paused; }
+.marquee-item {
+  display:flex; align-items:center; gap:12px;
+  font-family:'Outfit',sans-serif; font-size:12px; font-weight:600;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.5); white-space:nowrap; flex-shrink:0;
+}
+.marquee-item .dot { width:4px; height:4px; background:var(--sakura3); border-radius:50%; flex-shrink:0; }
+@keyframes marquee { to { transform:translateX(-50%); } }
+
+/* ── SECTION COMMON ── */
+section { padding:120px 60px; }
+.wrap { max-width:1220px; margin:0 auto; }
+.section-label {
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:11px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+  color: var(--sakura-deep); margin-bottom:16px;
+}
+.section-label::before { content:''; width:20px; height:2px; background:var(--sakura3); border-radius:2px; }
+h2 {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,4.5vw,64px);
+  font-weight:400; line-height:1.1; letter-spacing:-.02em;
+  color:var(--navy);
+}
+h2 em { font-style:italic; color:var(--sakura-deep); }
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .7s, transform .7s; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;} .d4{transition-delay:.4s;}
 
 /* ── PRODUCTS ── */
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
-.pcard:first-child{grid-column:span 2;}
-.pcard{position:relative;overflow:hidden;background:var(--bg2);padding:52px 44px;cursor:none;transition:background .3s;}
-.pcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,168,83,.04),transparent 60%);opacity:0;transition:opacity .4s;}
-.pcard:hover::before{opacity:1;}
-.pcard:hover{background:var(--bg3);}
-.pcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px;}
-.picon{width:54px;height:54px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;}
-.picon.r{background:rgba(232,57,42,.12);}
-.picon.g{background:rgba(212,168,83,.12);}
-.picon.c{background:rgba(61,217,235,.1);}
-.pbadge{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:6px 12px;border-radius:2px;}
-.bnew{background:rgba(232,57,42,.15);color:var(--red);}
-.bios{background:rgba(61,217,235,.1);color:var(--cyan);}
-.bweb{background:rgba(212,168,83,.12);color:var(--gold);}
-.ptitle{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;line-height:1.2;margin-bottom:12px;}
-.pcard:first-child .ptitle{font-size:36px;}
-.pdesc{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:28px;}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
-.pill{border:1px solid var(--border);padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--muted);transition:border-color .2s,color .2s;}
-.pcard:hover .pill{border-color:rgba(212,168,83,.3);color:var(--gold);}
-.plink{display:inline-flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:gap .2s;}
-.plink:hover{gap:14px;}
-.plink:hover svg{transform:translateX(4px);}
-.plink svg{transition:transform .2s;}
-.pnum{position:absolute;bottom:40px;right:40px;font-family:'Cormorant Garamond',serif;font-size:100px;font-weight:700;line-height:1;color:rgba(255,255,255,.03);pointer-events:none;user-select:none;}
+#products { background:var(--white); }
+.products-header { margin-bottom:64px; }
+.products-header p { color:var(--text2); max-width:520px; margin-top:20px; font-size:16px; line-height:1.8; }
+
+.products-grid {
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr;
+  grid-template-rows:auto auto;
+  gap:16px;
+}
+.product-card {
+  background: var(--cream);
+  border:1px solid rgba(247,197,203,0.5);
+  border-radius:20px; padding:44px 40px;
+  position:relative; overflow:hidden;
+  cursor:pointer; transition:all .3s;
+  text-decoration:none; color:inherit;
+  display:flex; flex-direction:column;
+}
+.product-card:hover {
+  transform:translateY(-6px);
+  box-shadow:var(--shadow-lg);
+  border-color:rgba(201,79,106,0.25);
+  background:var(--white);
+}
+.product-card.featured {
+  grid-column:span 1;
+  grid-row:span 2;
+  background: linear-gradient(145deg, var(--navy), var(--navy2));
+  border-color:transparent;
+  color:#fff;
+}
+.product-card.featured:hover { transform:translateY(-6px); }
+
+.product-card::before {
+  content:'';
+  position:absolute; top:0; right:0;
+  width:180px; height:180px;
+  background:radial-gradient(circle, rgba(247,197,203,0.2), transparent 70%);
+  border-radius:50%; transform:translate(40px,-40px);
+  pointer-events:none;
+}
+.product-card.featured::before {
+  background:radial-gradient(circle, rgba(247,197,203,0.07), transparent 70%);
+  width:280px; height:280px;
+}
+
+.card-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:28px; }
+.card-icon {
+  width:56px; height:56px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; flex-shrink:0;
+}
+.icon-pink { background:rgba(247,197,203,0.5); }
+.icon-gold { background:rgba(201,162,39,0.12); }
+.icon-navy { background:rgba(26,39,68,0.08); }
+.icon-featured { background:rgba(255,255,255,0.1); }
+
+.card-badge {
+  font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  padding:6px 14px; border-radius:50px;
+}
+.badge-app { background:rgba(201,79,106,0.1); color:var(--sakura-deep); }
+.badge-web { background:rgba(201,162,39,0.12); color:#a07a10; }
+.badge-elite { background:rgba(255,200,0,0.15); color:#b8860b; }
+.product-card.featured .card-badge { background:rgba(247,197,203,0.15); color:rgba(247,197,203,0.9); }
+
+.card-num {
+  position:absolute; bottom:28px; right:32px;
+  font-family:'Playfair Display',serif; font-size:88px; font-weight:900;
+  color:rgba(26,39,68,0.04); line-height:1; pointer-events:none; user-select:none;
+}
+.product-card.featured .card-num { color:rgba(255,255,255,0.04); }
+
+.card-title {
+  font-family:'Playfair Display',serif;
+  font-size:22px; font-weight:600; line-height:1.25;
+  margin-bottom:12px; color:var(--navy);
+}
+.product-card.featured .card-title { font-size:32px; color:#fff; }
+.card-desc { font-size:14px; color:var(--text2); line-height:1.75; margin-bottom:24px; flex:1; }
+.product-card.featured .card-desc { color:rgba(255,255,255,0.65); }
+
+.card-pills { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:28px; }
+.pill {
+  border:1px solid rgba(26,39,68,0.1);
+  padding:5px 13px; border-radius:20px;
+  font-size:11px; font-weight:600; color:var(--text3);
+  transition:all .2s;
+}
+.product-card:hover .pill { border-color:rgba(201,79,106,0.3); color:var(--sakura-deep); }
+.product-card.featured .pill { border-color:rgba(255,255,255,0.15); color:rgba(255,255,255,0.5); }
+.product-card.featured:hover .pill { border-color:rgba(247,197,203,0.4); color:rgba(247,197,203,0.8); }
+
+.card-link {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:13px; font-weight:700; letter-spacing:.06em;
+  color:var(--sakura-deep); transition:gap .2s; text-decoration:none;
+}
+.product-card.featured .card-link { color:var(--sakura); }
+.card-link svg { transition:transform .2s; }
+.product-card:hover .card-link { gap:14px; }
+.product-card:hover .card-link svg { transform:translateX(4px); }
 
 /* ── FEATURES ── */
-#features{background:var(--bg2);}
-.flayout{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;}
-.fvis{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center;}
-.fcircle{width:340px;height:340px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;animation:spin 30s linear infinite;}
-.fcircle::before{content:'';position:absolute;width:calc(100% + 60px);height:calc(100% + 60px);border:1px solid rgba(212,168,83,.05);border-radius:50%;animation:spin 40s linear infinite reverse;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.fdot{position:absolute;width:8px;height:8px;background:var(--gold);border-radius:50%;box-shadow:0 0 12px rgba(212,168,83,.8);}
-.fdot:nth-child(1){top:-4px;left:50%;transform:translateX(-50%);}
-.fdot:nth-child(2){bottom:-4px;left:50%;transform:translateX(-50%);}
-.fdot:nth-child(3){left:-4px;top:50%;transform:translateY(-50%);}
-.fdot:nth-child(4){right:-4px;top:50%;transform:translateY(-50%);}
-.finner{text-align:center;animation:spin 30s linear infinite reverse;}
-.fkanji{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;color:var(--gold);opacity:.8;display:block;line-height:1;}
-.fcenter-lbl{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
-.forbit{position:absolute;width:56px;height:56px;background:var(--bg);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 30px rgba(0,0,0,.5);animation:spin 30s linear infinite reverse;}
-.forbit:nth-child(2){top:0;left:50%;transform:translate(-50%,-50%);}
-.forbit:nth-child(3){bottom:0;left:50%;transform:translate(-50%,50%);}
-.forbit:nth-child(4){left:0;top:50%;transform:translate(-50%,-50%);}
-.forbit:nth-child(5){right:0;top:50%;transform:translate(50%,-50%);}
-.flist{list-style:none;}
-.flist li{display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);}
-.flist li:last-child{border-bottom:none;}
-.ficon-sm{width:40px;height:40px;flex-shrink:0;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(212,168,83,.05);margin-top:2px;}
-.ftxt h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px;}
-.ftxt p{font-size:13px;color:var(--muted);line-height:1.6;}
+#features { background:var(--cream); }
+.features-layout { display:grid; grid-template-columns:1fr 1fr; gap:100px; align-items:center; }
+.features-visual { position:relative; display:flex; align-items:center; justify-content:center; }
+.feature-ring {
+  width:360px; height:360px;
+  border:1.5px solid var(--sakura-border);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative;
+  animation:spin 35s linear infinite;
+}
+.feature-ring::before {
+  content:''; position:absolute;
+  width:calc(100%+70px); height:calc(100%+70px);
+  border:1px dashed rgba(247,197,203,0.4);
+  border-radius:50%; animation:spin 50s linear infinite reverse;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.ring-dot { position:absolute; width:10px; height:10px; background:var(--sakura3); border-radius:50%; box-shadow:0 0 14px rgba(240,160,173,0.8); }
+.ring-dot:nth-child(1){top:-5px; left:50%; transform:translateX(-50%);}
+.ring-dot:nth-child(2){bottom:-5px; left:50%; transform:translateX(-50%);}
+.ring-dot:nth-child(3){left:-5px; top:50%; transform:translateY(-50%);}
+.ring-dot:nth-child(4){right:-5px; top:50%; transform:translateY(-50%);}
+.ring-center { animation:spin 35s linear infinite reverse; text-align:center; }
+.ring-kanji { font-family:'Noto Serif JP',serif; font-size:80px; font-weight:700; color:var(--navy); opacity:.8; display:block; line-height:1; }
+.ring-label { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--text3); margin-top:10px; }
+.ring-icon {
+  position:absolute; width:60px; height:60px;
+  background:var(--white); border:1.5px solid var(--sakura-border);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:22px; box-shadow:var(--shadow);
+  animation:spin 35s linear infinite reverse;
+}
+.ring-icon:nth-child(2){top:0;left:50%;transform:translate(-50%,-50%);}
+.ring-icon:nth-child(3){bottom:0;left:50%;transform:translate(-50%,50%);}
+.ring-icon:nth-child(4){left:0;top:50%;transform:translate(-50%,-50%);}
+.ring-icon:nth-child(5){right:0;top:50%;transform:translate(50%,-50%);}
+
+.features-list { list-style:none; }
+.features-list li {
+  display:flex; gap:20px;
+  padding:28px 0; border-bottom:1px solid var(--sakura-border);
+}
+.features-list li:last-child { border-bottom:none; }
+.feature-icon-sm {
+  width:46px; height:46px; flex-shrink:0;
+  background:rgba(247,197,203,0.2);
+  border:1.5px solid rgba(247,197,203,0.5);
+  border-radius:12px; display:flex; align-items:center; justify-content:center;
+  font-size:20px; margin-top:2px;
+  transition:all .3s;
+}
+.features-list li:hover .feature-icon-sm { background:var(--sakura); border-color:var(--sakura3); }
+.feature-text h3 { font-family:'Outfit',sans-serif; font-size:15px; font-weight:700; margin-bottom:7px; color:var(--navy); }
+.feature-text p { font-size:14px; color:var(--text2); line-height:1.7; }
 
 /* ── AFFILIATE ── */
-.ahero{background:linear-gradient(135deg,var(--bg2),rgba(212,168,83,.05) 100%);border:1px solid var(--border);border-radius:4px;padding:80px;position:relative;overflow:hidden;margin-bottom:60px;}
-.ahero::before{content:'AFFILIATE';position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Syne',sans-serif;font-size:80px;font-weight:800;color:rgba(212,168,83,.03);letter-spacing:.2em;white-space:nowrap;}
-.agrid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
-.atitle{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:1.1;margin-bottom:20px;}
-.atitle em{font-style:italic;color:var(--gold);}
-.adesc{color:var(--muted);line-height:1.7;margin-bottom:32px;}
-.cdisplay{text-align:center;background:rgba(212,168,83,.06);border:1px solid rgba(212,168,83,.2);border-radius:4px;padding:48px;animation:glow 3s ease-in-out infinite;}
-.cnum{font-family:'Cormorant Garamond',serif;font-size:90px;font-weight:700;color:var(--gold);line-height:1;display:block;text-shadow:0 0 60px rgba(212,168,83,.3);}
-.clbl{font-size:13px;letter-spacing:.1em;color:var(--muted);margin-top:8px;text-transform:uppercase;}
-.csub{font-size:12px;color:rgba(212,168,83,.5);margin-top:12px;}
-@keyframes glow{0%,100%{box-shadow:0 0 30px rgba(212,168,83,.2);}50%{box-shadow:0 0 60px rgba(212,168,83,.45);}}
-.asteps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
-.astep{background:var(--bg2);padding:40px 32px;border:1px solid var(--border);position:relative;overflow:hidden;transition:background .3s;}
-.astep:hover{background:var(--bg3);}
-.astep-n{font-family:'Cormorant Garamond',serif;font-size:80px;font-weight:700;color:rgba(212,168,83,.06);position:absolute;right:-8px;top:-10px;line-height:1;pointer-events:none;}
-.astep h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:10px;}
-.astep p{font-size:13px;color:var(--muted);line-height:1.6;}
-.astep-ico{font-size:28px;margin-bottom:20px;}
+#affiliate { background:var(--white); }
+.affiliate-hero {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  border-radius:24px; padding:80px;
+  position:relative; overflow:hidden; margin-bottom:48px;
+}
+.affiliate-hero::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 500px 400px at 0% 0%, rgba(247,197,203,0.1), transparent),
+              radial-gradient(ellipse 400px 300px at 100% 100%, rgba(201,162,39,0.08), transparent);
+}
+.affiliate-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; position:relative; z-index:1; }
+.affiliate-title { font-family:'Playfair Display',serif; font-size:52px; font-weight:400; line-height:1.1; margin-bottom:24px; color:#fff; }
+.affiliate-title em { font-style:italic; color:var(--sakura); }
+.affiliate-desc { color:rgba(255,255,255,0.6); line-height:1.8; margin-bottom:36px; font-size:16px; }
+.commission-display {
+  text-align:center;
+  background:rgba(255,255,255,0.05);
+  border:1.5px solid rgba(247,197,203,0.2);
+  border-radius:20px; padding:52px;
+  animation:glowPulse 4s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%,100%{box-shadow:0 0 30px rgba(247,197,203,0.1);}
+  50%{box-shadow:0 0 60px rgba(247,197,203,0.2);}
+}
+.commission-num {
+  font-family:'Playfair Display',serif;
+  font-size:96px; font-weight:900; color:var(--sakura);
+  line-height:1; display:block;
+  text-shadow:0 0 60px rgba(247,197,203,0.4);
+}
+.commission-label { font-size:13px; letter-spacing:.15em; color:rgba(255,255,255,0.4); margin-top:12px; text-transform:uppercase; }
+.commission-sub { font-size:13px; color:rgba(247,197,203,0.4); margin-top:12px; }
+
+.affiliate-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.step-card {
+  background:var(--cream);
+  border:1px solid rgba(247,197,203,0.4);
+  border-radius:20px; padding:40px 32px;
+  position:relative; overflow:hidden;
+  transition:all .3s;
+}
+.step-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:rgba(201,79,106,0.2); }
+.step-num {
+  font-family:'Playfair Display',serif; font-size:84px; font-weight:900;
+  color:rgba(201,79,106,0.06); position:absolute; right:-8px; top:-16px;
+  line-height:1; pointer-events:none;
+}
+.step-icon { font-size:32px; margin-bottom:20px; }
+.step-card h3 { font-family:'Outfit',sans-serif; font-size:16px; font-weight:700; margin-bottom:10px; color:var(--navy); }
+.step-card p { font-size:14px; color:var(--text2); line-height:1.7; }
 
 /* ── PARTNERSHIP ── */
-#partnership{background:var(--bg2);}
-.ptgrid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
-.ptcards{display:flex;flex-direction:column;gap:2px;}
-.ptcard{background:var(--bg);border:1px solid var(--border);padding:32px;cursor:none;transition:background .3s,border-color .3s;position:relative;overflow:hidden;}
-.ptcard::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transform-origin:top;transition:transform .3s;}
-.ptcard:hover::after{transform:scaleY(1);}
-.ptcard:hover{background:var(--bg3);border-color:rgba(212,168,83,.2);}
-.ptcard-hd{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
-.ptcard h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
-.ptcard p{font-size:13px;color:var(--muted);line-height:1.6;}
-.ptbox{background:rgba(212,168,83,.05);border:1px solid rgba(212,168,83,.2);border-radius:4px;padding:52px;position:sticky;top:120px;}
-.ptbox h3{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;line-height:1.2;margin-bottom:16px;}
-.ptbox h3 em{font-style:italic;color:var(--gold);}
-.ptbox p{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:32px;}
-.ig{margin-bottom:16px;}
-.ig input,.ig select,.ig textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:2px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;appearance:none;}
-.ig input::placeholder,.ig textarea::placeholder{color:var(--muted);}
-.ig input:focus,.ig select:focus,.ig textarea:focus{border-color:rgba(212,168,83,.5);}
-.ig textarea{resize:none;height:100px;}
-.ig select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6880' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;}
-.ig select option{background:#111127;}
+#partnership { background:var(--cream); }
+.partnership-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start; }
+.partner-cards { display:flex; flex-direction:column; gap:12px; }
+.partner-card {
+  background:var(--white);
+  border:1px solid rgba(247,197,203,0.4);
+  border-radius:16px; padding:28px 32px;
+  transition:all .3s; position:relative; overflow:hidden;
+  cursor:pointer;
+}
+.partner-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px; background:linear-gradient(to bottom, var(--sakura3), var(--sakura-deep));
+  border-radius:2px; transform:scaleY(0); transform-origin:top;
+  transition:transform .3s;
+}
+.partner-card:hover::before { transform:scaleY(1); }
+.partner-card:hover { background:var(--cream); box-shadow:var(--shadow); transform:translateX(4px); }
+.partner-card-header { display:flex; align-items:center; gap:16px; margin-bottom:10px; }
+.partner-icon { font-size:28px; }
+.partner-card h3 { font-family:'Outfit',sans-serif; font-size:15px; font-weight:700; color:var(--navy); }
+.partner-card p { font-size:14px; color:var(--text2); line-height:1.65; padding-left:44px; }
+
+.contact-box {
+  background:var(--white);
+  border:1.5px solid rgba(247,197,203,0.5);
+  border-radius:24px; padding:52px;
+  position:sticky; top:120px;
+  box-shadow:var(--shadow);
+}
+.contact-box h3 { font-family:'Playfair Display',serif; font-size:32px; font-weight:400; line-height:1.25; margin-bottom:14px; color:var(--navy); }
+.contact-box h3 em { font-style:italic; color:var(--sakura-deep); }
+.contact-box > p { color:var(--text2); font-size:14px; line-height:1.7; margin-bottom:32px; }
+
+.form-group { margin-bottom:14px; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width:100%;
+  background:var(--cream);
+  border:1.5px solid rgba(247,197,203,0.5);
+  border-radius:12px; padding:14px 18px;
+  font-family:'Outfit',sans-serif; font-size:14px;
+  color:var(--text); outline:none;
+  transition:border-color .2s, background .2s;
+  appearance:none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color:var(--text3); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color:var(--sakura3); background:var(--white);
+}
+.form-group textarea { resize:none; height:100px; }
+.form-group select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888a0' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 18px center;
+}
+.form-group select option { background:#fff; color:var(--text); }
+.btn-submit {
+  width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+  background:linear-gradient(135deg, var(--sakura-deep), var(--navy));
+  color:#fff; padding:15px 32px; border-radius:50px;
+  font-family:'Outfit',sans-serif; font-size:14px; font-weight:600;
+  border:none; cursor:pointer;
+  transition:all .25s;
+  box-shadow:0 4px 20px rgba(201,79,106,0.3);
+}
+.btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(201,79,106,0.4); }
 
 /* ── TESTIMONIALS ── */
-.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
-.tcard{background:var(--bg2);padding:40px 36px;border:1px solid var(--border);transition:background .3s;position:relative;}
-.tcard:hover{background:var(--bg3);}
-.tcard::before{content:'"';position:absolute;top:24px;right:32px;font-family:'Cormorant Garamond',serif;font-size:80px;color:rgba(212,168,83,.08);line-height:1;}
-.tstars{color:var(--gold);font-size:13px;letter-spacing:2px;margin-bottom:16px;}
-.ttxt{font-size:14px;line-height:1.8;color:var(--muted);margin-bottom:28px;font-style:italic;}
-.tauthor{display:flex;align-items:center;gap:14px;}
-.tavatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--red));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;}
-.tname{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
-.tmeta{font-size:11px;color:var(--muted);margin-top:2px;}
+#testimonials { background:var(--white); }
+.testi-header { text-align:center; margin-bottom:64px; }
+.testi-header p { color:var(--text2); margin-top:16px; font-size:16px; }
+.testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.testi-card {
+  background:var(--cream);
+  border:1px solid rgba(247,197,203,0.4);
+  border-radius:20px; padding:40px 36px;
+  position:relative; overflow:hidden;
+  transition:all .3s;
+}
+.testi-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); background:var(--white); }
+.testi-quote {
+  position:absolute; top:20px; right:28px;
+  font-family:'Playfair Display',serif; font-size:80px;
+  color:rgba(201,79,106,0.08); line-height:1;
+}
+.testi-stars { color:var(--gold); font-size:14px; letter-spacing:3px; margin-bottom:16px; }
+.testi-text { font-size:14px; line-height:1.85; color:var(--text2); margin-bottom:28px; font-style:italic; }
+.testi-author { display:flex; align-items:center; gap:14px; }
+.testi-avatar {
+  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg, var(--sakura3), var(--sakura-deep));
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:#fff;
+}
+.testi-name { font-size:14px; font-weight:700; color:var(--navy); }
+.testi-meta { font-size:12px; color:var(--text3); margin-top:2px; }
 
 /* ── CTA ── */
-#cta{padding:100px 48px;}
-.cta-inner{max-width:1200px;margin:0 auto;background:linear-gradient(135deg,var(--bg2),rgba(212,168,83,.08));border:1px solid rgba(212,168,83,.2);border-radius:4px;padding:100px;text-align:center;position:relative;overflow:hidden;}
-.cta-inner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 400px at 50% 100%,rgba(212,168,83,.07),transparent);}
-.cta-inner h2{font-size:clamp(40px,5vw,70px);position:relative;z-index:1;}
-.cta-inner p{color:var(--muted);font-size:17px;max-width:560px;margin:20px auto 44px;line-height:1.7;position:relative;z-index:1;}
-.cta-acts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+#cta { padding:80px 60px 120px; background:var(--cream); }
+.cta-inner {
+  max-width:1220px; margin:0 auto;
+  background:linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  border-radius:28px; padding:100px;
+  text-align:center; position:relative; overflow:hidden;
+}
+.cta-inner::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse 700px 400px at 50% 100%, rgba(247,197,203,0.1), transparent),
+              radial-gradient(ellipse 400px 300px at 0% 0%, rgba(201,162,39,0.06), transparent);
+}
+.cta-inner .section-label { color:rgba(247,197,203,0.7); position:relative; z-index:1; }
+.cta-inner .section-label::before { background:rgba(247,197,203,0.4); }
+.cta-inner h2 { color:#fff; font-size:clamp(40px,5vw,68px); position:relative; z-index:1; }
+.cta-inner h2 em { color:var(--sakura); }
+.cta-inner p { color:rgba(255,255,255,0.55); font-size:17px; max-width:540px; margin:20px auto 44px; line-height:1.8; position:relative; z-index:1; }
+.cta-actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+.btn-cta-primary {
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--sakura3);
+  color:var(--navy); padding:15px 34px; border-radius:50px;
+  font-size:14px; font-weight:700; text-decoration:none;
+  transition:all .25s; letter-spacing:.02em;
+  box-shadow:0 4px 20px rgba(240,160,173,0.4);
+}
+.btn-cta-primary:hover { background:var(--sakura); transform:translateY(-3px); box-shadow:0 10px 30px rgba(240,160,173,0.5); }
+.btn-cta-secondary {
+  display:inline-flex; align-items:center; gap:10px;
+  border:1.5px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.8); padding:13px 32px; border-radius:50px;
+  font-size:14px; font-weight:600; text-decoration:none;
+  transition:all .25s;
+}
+.btn-cta-secondary:hover { border-color:rgba(255,255,255,0.5); color:#fff; }
 
 /* ── FOOTER ── */
-footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48px 40px;}
-.fgrid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px;}
-.fbrand p{color:var(--muted);font-size:14px;line-height:1.7;margin-top:16px;max-width:280px;}
-.flogo{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
-.flogo-mark{width:34px;height:34px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:#fff;}
-.flogo-txt{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text);}
-.flogo-txt span{color:var(--gold);}
-.fcol h4{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
-.fcol ul{list-style:none;}
-.fcol ul li{margin-bottom:12px;}
-.fcol ul a{text-decoration:none;color:rgba(232,228,217,.6);font-size:14px;transition:color .2s;}
-.fcol ul a:hover{color:var(--gold);}
-.fbot{max-width:1200px;margin:0 auto;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted);}
-.fbot-links{display:flex;gap:24px;}
-.fbot-links a{color:var(--muted);text-decoration:none;transition:color .2s;}
-.fbot-links a:hover{color:var(--gold);}
-
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .8s,transform .8s;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+footer {
+  background:var(--navy); padding:80px 60px 40px;
+  border-top:3px solid var(--sakura3);
+}
+.footer-grid {
+  max-width:1220px; margin:0 auto;
+  display:grid; grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:60px; margin-bottom:60px;
+}
+.footer-brand p { color:rgba(255,255,255,0.4); font-size:14px; line-height:1.8; margin-top:16px; max-width:280px; }
+.footer-logo { display:flex; align-items:center; gap:12px; margin-bottom:16px; text-decoration:none; }
+.footer-logo-mark {
+  width:38px; height:38px;
+  background:linear-gradient(135deg, var(--sakura-deep), rgba(201,79,106,0.7));
+  border-radius:10px; display:flex; align-items:center; justify-content:center;
+  font-family:'Noto Serif JP',serif; font-size:17px; font-weight:700; color:#fff;
+}
+.footer-logo-text { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:#fff; }
+.footer-logo-text span { color:var(--sakura); }
+.footer-email-btn {
+  margin-top:24px; display:inline-flex; align-items:center; gap:8px;
+  border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.4); font-size:13px;
+  padding:9px 18px; border-radius:50px; text-decoration:none;
+  transition:all .2s;
+}
+.footer-email-btn:hover { border-color:var(--sakura3); color:var(--sakura); }
+.footer-col h4 {
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.3); margin-bottom:20px;
+}
+.footer-col ul { list-style:none; }
+.footer-col ul li { margin-bottom:12px; }
+.footer-col ul a {
+  text-decoration:none; color:rgba(255,255,255,0.5);
+  font-size:14px; transition:color .2s;
+}
+.footer-col ul a:hover { color:var(--sakura); }
+.footer-bottom {
+  max-width:1220px; margin:0 auto;
+  padding-top:32px; border-top:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:12px; color:rgba(255,255,255,0.25);
+}
+.footer-bottom-links { display:flex; gap:24px; }
+.footer-bottom-links a { color:rgba(255,255,255,0.25); text-decoration:none; transition:color .2s; }
+.footer-bottom-links a:hover { color:var(--sakura); }
 
 /* ── MOBILE ── */
-@media(max-width:900px){
-  nav{padding:16px 24px;}
+@media(max-width:960px){
+  nav{padding:14px 24px;}
+  nav.scrolled{padding:12px 24px;}
   .nav-links{display:none;}
   section{padding:80px 24px;}
-  h1{font-size:clamp(42px,12vw,80px);}
-  .hstats{gap:24px;flex-wrap:wrap;}
-  .snum{font-size:32px;}
-  .pgrid,.agrid,.flayout,.asteps,.ptgrid,.tgrid,.fgrid{grid-template-columns:1fr;}
-  .pcard:first-child{grid-column:span 1;}
-  .ahero{padding:48px 32px;}
-  .cdisplay{padding:32px;}
-  .cnum{font-size:72px;}
+  #hero{padding:120px 24px 60px;}
+  .hero-stats{gap:24px; flex-wrap:wrap; justify-content:center;}
+  .stat-sep{display:none;}
+  h1{font-size:clamp(38px,10vw,64px);}
+  .products-grid{grid-template-columns:1fr; }
+  .product-card.featured{grid-row:span 1;}
+  .affiliate-grid,.features-layout,.partnership-grid{grid-template-columns:1fr;}
+  .affiliate-hero{padding:48px 32px;}
+  .affiliate-steps{grid-template-columns:1fr;}
+  .testi-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr; gap:40px;}
+  .footer-bottom{flex-direction:column;gap:16px;text-align:center;}
   .cta-inner{padding:60px 32px;}
-  .fgrid{gap:40px;}
-  .fbot{flex-direction:column;gap:16px;text-align:center;}
 }
 </style>
 </head>
 <body>
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+
+<canvas id="sakura-canvas"></canvas>
 
 <!-- ══ NAV ══ -->
 <nav id="navbar">
@@ -259,16 +728,14 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
   </a>
   <ul class="nav-links">
     <li><a href="#products" data-i18n="nav.products">Sản Phẩm</a></li>
-    <li><a href="#features"  data-i18n="nav.features">Tính Năng</a></li>
+    <li><a href="#features" data-i18n="nav.features">Tính Năng</a></li>
     <li><a href="#affiliate" data-i18n="nav.affiliate">Tiếp Thị</a></li>
     <li><a href="#partnership" data-i18n="nav.partner">Đối Tác</a></li>
   </ul>
   <div class="nav-right">
-    <!-- LANGUAGE TOGGLE -->
     <button class="lang-btn" id="langBtn" onclick="toggleLang()" aria-label="Switch language">
       <span class="lang-flag" id="lFlag">🇻🇳</span>
       <span class="lang-label" id="lLabel">VI</span>
-      <span class="lang-arrow">▾</span>
     </button>
     <a href="#affiliate" class="nav-cta" data-i18n="nav.cta">Tham Gia Affiliate</a>
   </div>
@@ -276,104 +743,128 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
 
 <!-- ══ HERO ══ -->
 <section id="hero">
-  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
-  <div class="hk hk1">学</div><div class="hk hk2">日本語</div>
-  <div class="eyebrow" data-i18n="hero.eyebrow">Học Tiếng Nhật Bằng AI Thế Hệ Mới</div>
-  <h1 data-i18n-html="hero.h1">Chinh phục<br/>tiếng Nhật theo<br/><span class="line-red"><em>cách thông minh</em></span></h1>
+  <div class="hero-kanji hk1">学</div>
+  <div class="hero-kanji hk2">桜</div>
+  <div class="eyebrow"><span class="eyebrow-dot"></span><span data-i18n="hero.eyebrow">Học Tiếng Nhật Bằng AI Thế Hệ Mới</span><span class="eyebrow-dot"></span></div>
+  <h1 data-i18n-html="hero.h1">Chinh phục<br/>tiếng Nhật theo<br/><em><span class="accent">cách thông minh</span></em></h1>
   <p class="hero-sub" data-i18n="hero.sub">Bộ công cụ AI hàng đầu cho luyện thi JLPT và học tiếng Nhật toàn diện. Được xây dựng cho người học nghiêm túc, vận hành bởi trí tuệ nhân tạo thế hệ mới.</p>
   <div class="hero-acts">
-    <a href="#products" class="btn-p">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <a href="#products" class="btn-primary">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       <span data-i18n="hero.cta1">Khám Phá Sản Phẩm</span>
     </a>
-    <a href="#affiliate" class="btn-s" data-i18n="hero.cta2">Kiếm Tiền Với Affiliate</a>
+    <a href="#affiliate" class="btn-secondary" data-i18n="hero.cta2">Kiếm Tiền Với Affiliate</a>
   </div>
-  <div class="hstats">
-    <div class="sitem"><span class="snum">5</span><span class="slbl" data-i18n="hero.s1">Sản Phẩm AI</span></div>
-    <div class="ssep"></div>
-    <div class="sitem"><span class="snum">N1–N5</span><span class="slbl" data-i18n="hero.s2">Toàn Cấp JLPT</span></div>
-    <div class="ssep"></div>
-    <div class="sitem"><span class="snum">∞</span><span class="slbl" data-i18n="hero.s3">Câu Hỏi AI</span></div>
-    <div class="ssep"></div>
-    <div class="sitem"><span class="snum">🔒</span><span class="slbl" data-i18n="hero.s4">AI Bảo Mật Tuyệt Đối</span></div>
+  <div class="hero-stats">
+    <div class="stat-item"><span class="stat-num"><span>5</span></span><span class="stat-lbl" data-i18n="hero.s1">Sản Phẩm AI</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">N1–N5</span><span class="stat-lbl" data-i18n="hero.s2">Toàn Cấp JLPT</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">∞</span><span class="stat-lbl" data-i18n="hero.s3">Câu Hỏi AI</span></div>
+    <div class="stat-sep"></div>
+    <div class="stat-item"><span class="stat-num">🔒</span><span class="stat-lbl" data-i18n="hero.s4">Bảo Mật Tuyệt Đối</span></div>
   </div>
 </section>
 
 <!-- ══ MARQUEE ══ -->
-<div class="mwrap"><div class="mtrack" id="mtrack"></div></div>
+<div class="marquee-wrap">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
 
 <!-- ══ PRODUCTS ══ -->
 <section id="products">
   <div class="wrap">
-    <div style="margin-bottom:70px;" class="reveal">
-      <div class="slabel" data-i18n="products.label">Sản Phẩm</div>
+    <div class="products-header reveal">
+      <div class="section-label" data-i18n="products.label">Sản Phẩm</div>
       <h2 data-i18n-html="products.h2">Mọi công cụ bạn cần<br/><em>để chinh phục tiếng Nhật</em></h2>
-      <p style="color:var(--muted);max-width:520px;margin-top:20px;line-height:1.7;font-size:16px;" data-i18n="products.desc">Từ người mới bắt đầu đến thí sinh JLPT cấp cao — bộ công cụ AI của chúng tôi bao phủ mọi cấp độ trong hành trình học tiếng Nhật của bạn.</p>
+      <p data-i18n="products.desc">Từ người mới bắt đầu đến thí sinh JLPT cấp cao — bộ công cụ AI của chúng tôi bao phủ mọi cấp độ trong hành trình học tiếng Nhật của bạn.</p>
     </div>
-    <div class="pgrid">
-      <!-- FUJI -->
-      <div class="pcard reveal">
-        <div class="pnum">01</div>
-        <div class="pcard-top"><div class="picon r">🦊</div><span class="pbadge bios">iOS App</span></div>
-        <div class="ptitle">Japanese.With.Fuji</div>
-        <p class="pdesc" data-i18n="p.fuji">Trải nghiệm học tiếng Nhật gamified hoàn toàn, được hỗ trợ bởi Apple Intelligence chạy hoàn toàn trên thiết bị. Chat với nhân vật AI, tích lũy XP, thăng hạng và chinh phục tiếng Nhật — bảo mật 100%.</p>
-        <div class="pills">
-          <span class="pill">Gamified XP</span><span class="pill">AI Characters</span>
-          <span class="pill">Apple Intelligence</span><span class="pill" data-i18n="pill.priv">Bảo Mật On-Device</span><span class="pill">iPhone 15 Pro+</span>
+
+    <div class="products-grid">
+      <!-- FUJI - FEATURED -->
+      <a href="https://drtuan94.github.io/FujiChat-Play/" target="_blank" rel="noopener" class="product-card featured reveal">
+        <div class="card-num">01</div>
+        <div class="card-header">
+          <div class="card-icon icon-featured">🦊</div>
+          <span class="card-badge">iOS App</span>
         </div>
-        <a href="https://drtuan94.github.io/FujiChat-Play/" target="_blank" class="plink">
+        <div class="card-title">Japanese.With.Fuji</div>
+        <p class="card-desc" data-i18n="p.fuji">Trải nghiệm học tiếng Nhật gamified hoàn toàn, được hỗ trợ bởi Apple Intelligence chạy hoàn toàn trên thiết bị. Chat với nhân vật AI, tích lũy XP, thăng hạng và chinh phục tiếng Nhật — bảo mật 100%.</p>
+        <div class="card-pills">
+          <span class="pill">Gamified XP</span>
+          <span class="pill">AI Characters</span>
+          <span class="pill">Apple Intelligence</span>
+          <span class="pill" data-i18n="pill.priv">Bảo Mật On-Device</span>
+        </div>
+        <span class="card-link">
           <span data-i18n="p.explore">Khám Phá Ứng Dụng</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
       <!-- N4-N5 -->
-      <div class="pcard reveal d1">
-        <div class="pnum">02</div>
-        <div class="pcard-top"><div class="picon g">🎯</div><span class="pbadge bweb">Web</span></div>
-        <div class="ptitle">Anki JLPT N4–N5</div>
-        <p class="pdesc" data-i18n="p.n45">Bắt đầu hành trình JLPT với bài thi AI cho cấp N4 và N5. Phù hợp cho người mới bắt đầu và học viên trung cấp bước vào thế giới năng lực tiếng Nhật.</p>
-        <div class="pills"><span class="pill">N4</span><span class="pill">N5</span><span class="pill">AI-Powered</span></div>
-        <a href="https://drtuan94.github.io/Anki-N4-N5-JLPT-Test-AI-Powered/" target="_blank" class="plink">
+      <a href="https://drtuan94.github.io/Anki-N4-N5-JLPT-Test-AI-Powered/" target="_blank" rel="noopener" class="product-card reveal d1">
+        <div class="card-num">02</div>
+        <div class="card-header">
+          <div class="card-icon icon-gold">🎯</div>
+          <span class="card-badge badge-web">Web</span>
+        </div>
+        <div class="card-title">Anki JLPT N4–N5</div>
+        <p class="card-desc" data-i18n="p.n45">Bắt đầu hành trình JLPT với bài thi AI cho cấp N4 và N5. Phù hợp cho người mới bắt đầu và học viên trung cấp.</p>
+        <div class="card-pills"><span class="pill">N4</span><span class="pill">N5</span><span class="pill">AI-Powered</span></div>
+        <span class="card-link">
           <span data-i18n="p.test">Luyện Thi Ngay</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
       <!-- N3 -->
-      <div class="pcard reveal d1">
-        <div class="pnum">03</div>
-        <div class="pcard-top"><div class="picon g">⚡</div><span class="pbadge bweb">Web</span></div>
-        <div class="ptitle">Anki JLPT N3</div>
-        <p class="pdesc" data-i18n="p.n3">Nâng cấp lên N3 với các câu hỏi AI động nhắm vào điểm yếu của bạn, củng cố ngữ pháp, từ vựng và khả năng đọc hiểu.</p>
-        <div class="pills"><span class="pill">N3</span><span class="pill">AI-Powered</span><span class="pill" data-i18n="pill.adapt">Thích Ứng</span></div>
-        <a href="https://drtuan94.github.io/Anki-N3-JLPT-Test-AI-Powered/" target="_blank" class="plink">
+      <a href="https://drtuan94.github.io/Anki-N3-JLPT-Test-AI-Powered/" target="_blank" rel="noopener" class="product-card reveal d2">
+        <div class="card-num">03</div>
+        <div class="card-header">
+          <div class="card-icon icon-pink">⚡</div>
+          <span class="card-badge badge-web">Web</span>
+        </div>
+        <div class="card-title">Anki JLPT N3</div>
+        <p class="card-desc" data-i18n="p.n3">Nâng cấp lên N3 với các câu hỏi AI động nhắm vào điểm yếu của bạn, củng cố ngữ pháp, từ vựng và đọc hiểu.</p>
+        <div class="card-pills"><span class="pill">N3</span><span class="pill">AI-Powered</span><span class="pill" data-i18n="pill.adapt">Thích Ứng</span></div>
+        <span class="card-link">
           <span data-i18n="p.test">Luyện Thi Ngay</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
       <!-- N2 -->
-      <div class="pcard reveal d2">
-        <div class="pnum">04</div>
-        <div class="pcard-top"><div class="picon c">🔬</div><span class="pbadge bweb">Web</span></div>
-        <div class="ptitle">Anki JLPT N2</div>
-        <p class="pdesc" data-i18n="p.n2">Luyện thi N2 nâng cao với tiếng Nhật kinh doanh, cấu trúc ngữ pháp phức tạp và các bài đọc hiểu tinh tế.</p>
-        <div class="pills"><span class="pill">N2</span><span class="pill">AI-Powered</span><span class="pill" data-i18n="pill.adv">Nâng Cao</span></div>
-        <a href="https://drtuan94.github.io/Anki-N2-JLPT-Test-Ai-Powered/" target="_blank" class="plink">
+      <a href="https://drtuan94.github.io/Anki-N2-JLPT-Test-Ai-Powered/" target="_blank" rel="noopener" class="product-card reveal d2">
+        <div class="card-num">04</div>
+        <div class="card-header">
+          <div class="card-icon icon-navy">🔬</div>
+          <span class="card-badge badge-web">Web</span>
+        </div>
+        <div class="card-title">Anki JLPT N2</div>
+        <p class="card-desc" data-i18n="p.n2">Luyện thi N2 nâng cao với tiếng Nhật kinh doanh, cấu trúc ngữ pháp phức tạp và bài đọc hiểu tinh tế.</p>
+        <div class="card-pills"><span class="pill">N2</span><span class="pill">AI-Powered</span><span class="pill" data-i18n="pill.adv">Nâng Cao</span></div>
+        <span class="card-link">
           <span data-i18n="p.test">Luyện Thi Ngay</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
       <!-- N1 -->
-      <div class="pcard reveal d3">
-        <div class="pnum">05</div>
-        <div class="pcard-top"><div class="picon r">👑</div><span class="pbadge bnew" data-i18n="badge.elite">Đỉnh Cao</span></div>
-        <div class="ptitle">Anki JLPT N1</div>
-        <p class="pdesc" data-i18n="p.n1">Thử thách N1 tối thượng. Chinh phục tiếng Nhật trình độ bản ngữ với động cơ AI tiên tiến nhất, bao gồm văn học, ngữ pháp trừu tượng và đọc hiểu chuyên gia.</p>
-        <div class="pills"><span class="pill">N1</span><span class="pill">AI-Powered</span><span class="pill" data-i18n="pill.elite">Trình Độ Tinh Anh</span></div>
-        <a href="https://drtuan94.github.io/Anki-N1-JLPT-Test-AI-powered/" target="_blank" class="plink">
+      <a href="https://drtuan94.github.io/Anki-N1-JLPT-Test-AI-powered/" target="_blank" rel="noopener" class="product-card reveal d3">
+        <div class="card-num">05</div>
+        <div class="card-header">
+          <div class="card-icon icon-pink">👑</div>
+          <span class="card-badge badge-elite" data-i18n="badge.elite">Đỉnh Cao</span>
+        </div>
+        <div class="card-title">Anki JLPT N1</div>
+        <p class="card-desc" data-i18n="p.n1">Thử thách N1 tối thượng. Chinh phục tiếng Nhật trình độ bản ngữ với bộ đề AI tiên tiến nhất, văn học, ngữ pháp trừu tượng và đọc hiểu chuyên gia.</p>
+        <div class="card-pills"><span class="pill">N1</span><span class="pill">AI-Powered</span><span class="pill" data-i18n="pill.elite">Trình Độ Tinh Anh</span></div>
+        <span class="card-link">
           <span data-i18n="p.test">Luyện Thi Ngay</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
     </div>
   </div>
 </section>
@@ -381,23 +872,42 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
 <!-- ══ FEATURES ══ -->
 <section id="features">
   <div class="wrap">
-    <div class="flayout">
+    <div class="features-layout">
       <div>
-        <div class="slabel reveal" data-i18n="f.label">Tại Sao Chọn Chúng Tôi</div>
+        <div class="section-label reveal" data-i18n="f.label">Tại Sao Chọn Chúng Tôi</div>
         <h2 class="reveal d1" data-i18n-html="f.h2">Khác biệt hoàn toàn.<br/><em>Được thiết kế để thắng.</em></h2>
-        <p style="color:var(--muted);margin:24px 0 48px;line-height:1.7;" class="reveal d2" data-i18n="f.desc">Chúng tôi kết hợp trí tuệ nhân tạo tiên tiến với khoa học học tập đã được chứng minh để tạo ra những công cụ thực sự hiệu quả. Không có phần thừa. Chỉ có kết quả.</p>
-        <ul class="flist">
-          <li class="reveal d1"><div class="ficon-sm">🤖</div><div class="ftxt"><h3 data-i18n="f1.t">Trí Tuệ AI Thực Sự</h3><p data-i18n="f1.d">Bài thi JLPT của chúng tôi dùng AI tạo ra vô số câu hỏi độc đáo. Không bao giờ luyện thi cùng một bộ đề hai lần.</p></div></li>
-          <li class="reveal d2"><div class="ficon-sm">🔒</div><div class="ftxt"><h3 data-i18n="f2.t">Ưu Tiên Bảo Mật — AI On-Device</h3><p data-i18n="f2.d">FujiChat chạy hoàn toàn trên thiết bị qua Apple Intelligence. Không có dữ liệu nào rời khỏi điện thoại của bạn. Mãi mãi.</p></div></li>
-          <li class="reveal d3"><div class="ficon-sm">🎮</div><div class="ftxt"><h3 data-i18n="f3.t">Gamified Để Duy Trì Động Lực</h3><p data-i18n="f3.d">Hệ thống XP, cấp bậc pilot, tín dụng và tương tác nhân vật giữ bạn có động lực suốt hành trình học tập.</p></div></li>
-          <li class="reveal d4"><div class="ficon-sm">🎯</div><div class="ftxt"><h3 data-i18n="f4.t">Bao Phủ Toàn Bộ JLPT</h3><p data-i18n="f4.d">Từ người mới hoàn toàn ở N5 đến N1 trình độ bản ngữ — chúng tôi bao phủ mọi cấp độ JLPT một cách sâu sắc.</p></div></li>
+        <p style="color:var(--text2);margin:24px 0 48px;line-height:1.8;font-size:16px;" class="reveal d2" data-i18n="f.desc">Chúng tôi kết hợp trí tuệ nhân tạo tiên tiến với khoa học học tập đã được chứng minh để tạo ra những công cụ thực sự hiệu quả. Không có phần thừa. Chỉ có kết quả.</p>
+        <ul class="features-list">
+          <li class="reveal d1">
+            <div class="feature-icon-sm">🤖</div>
+            <div class="feature-text"><h3 data-i18n="f1.t">Trí Tuệ AI Thực Sự</h3><p data-i18n="f1.d">Bài thi JLPT của chúng tôi dùng AI tạo ra vô số câu hỏi độc đáo. Không bao giờ luyện thi cùng một bộ đề hai lần.</p></div>
+          </li>
+          <li class="reveal d2">
+            <div class="feature-icon-sm">🔒</div>
+            <div class="feature-text"><h3 data-i18n="f2.t">Ưu Tiên Bảo Mật — AI On-Device</h3><p data-i18n="f2.d">FujiChat chạy hoàn toàn trên thiết bị qua Apple Intelligence. Không có dữ liệu nào rời khỏi điện thoại của bạn. Mãi mãi.</p></div>
+          </li>
+          <li class="reveal d3">
+            <div class="feature-icon-sm">🎮</div>
+            <div class="feature-text"><h3 data-i18n="f3.t">Gamified Để Duy Trì Động Lực</h3><p data-i18n="f3.d">Hệ thống XP, cấp bậc pilot, tín dụng và tương tác nhân vật giữ bạn có động lực suốt hành trình học tập.</p></div>
+          </li>
+          <li class="reveal d4">
+            <div class="feature-icon-sm">🎯</div>
+            <div class="feature-text"><h3 data-i18n="f4.t">Bao Phủ Toàn Bộ JLPT</h3><p data-i18n="f4.d">Từ người mới hoàn toàn ở N5 đến N1 trình độ bản ngữ — chúng tôi bao phủ mọi cấp độ JLPT một cách sâu sắc.</p></div>
+          </li>
         </ul>
       </div>
-      <div class="fvis reveal">
-        <div class="fcircle">
-          <span class="fdot"></span><span class="fdot"></span><span class="fdot"></span><span class="fdot"></span>
-          <div class="forbit">🤖</div><div class="forbit">🎯</div><div class="forbit">🔒</div><div class="forbit">🎮</div>
-          <div class="finner"><span class="fkanji">合格</span><div class="fcenter-lbl" data-i18n="f.center">Vượt Qua JLPT</div></div>
+      <div class="features-visual reveal">
+        <div class="feature-ring">
+          <span class="ring-dot"></span><span class="ring-dot"></span>
+          <span class="ring-dot"></span><span class="ring-dot"></span>
+          <div class="ring-icon">🤖</div>
+          <div class="ring-icon">🎯</div>
+          <div class="ring-icon">🔒</div>
+          <div class="ring-icon">🎮</div>
+          <div class="ring-center">
+            <span class="ring-kanji">合格</span>
+            <div class="ring-label" data-i18n="f.center">Vượt Qua JLPT</div>
+          </div>
         </div>
       </div>
     </div>
@@ -405,34 +915,49 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
 </section>
 
 <!-- ══ AFFILIATE ══ -->
-<section id="affiliate" style="background:var(--bg);">
+<section id="affiliate">
   <div class="wrap">
-    <div class="slabel reveal" data-i18n="a.label">Chương Trình Affiliate</div>
-    <h2 class="reveal d1" style="margin-bottom:52px;" data-i18n-html="a.h2">Kiếm tiền trong khi<br/><em>chia sẻ kiến thức.</em></h2>
-    <div class="ahero reveal">
-      <div class="agrid">
+    <div class="section-label reveal" data-i18n="a.label">Chương Trình Affiliate</div>
+    <h2 class="reveal d1" style="margin-bottom:48px;" data-i18n-html="a.h2">Kiếm tiền trong khi<br/><em>chia sẻ kiến thức.</em></h2>
+    <div class="affiliate-hero reveal">
+      <div class="affiliate-grid">
         <div>
-          <div class="atitle" data-i18n-html="a.title">Hoa hồng lên tới <em>30%</em> cho mỗi đơn hàng</div>
-          <p class="adesc" data-i18n="a.desc">Tham gia chương trình affiliate của Coview-Education và kiếm hoa hồng hấp dẫn khi giới thiệu học viên đến với các công cụ học tiếng Nhật cao cấp của chúng tôi. Không giới hạn thu nhập — khán giả của bạn, thu nhập của bạn.</p>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a href="mailto:covieworganization.fujichat@proton.me?subject=Affiliate Program Application" class="btn-p" style="font-size:12px;padding:12px 24px;">
+          <div class="affiliate-title" data-i18n-html="a.title">Hoa hồng lên tới <em>30%</em> cho mỗi đơn hàng</div>
+          <p class="affiliate-desc" data-i18n="a.desc">Tham gia chương trình affiliate của Coview-Education và kiếm hoa hồng hấp dẫn khi giới thiệu học viên đến với các công cụ học tiếng Nhật cao cấp của chúng tôi. Không giới hạn thu nhập — khán giả của bạn, thu nhập của bạn.</p>
+          <div style="display:flex;gap:14px;flex-wrap:wrap;">
+            <a href="mailto:covieworganization.fujichat@proton.me?subject=Affiliate Program Application" class="btn-primary" style="font-size:13px;padding:13px 28px;">
               <span data-i18n="a.apply">Đăng Ký Ngay</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="#partnership" class="btn-s" style="font-size:12px;padding:12px 24px;" data-i18n="a.terms">Xem Điều Khoản</a>
+            <a href="#partnership" class="btn-cta-secondary" style="font-size:13px;padding:11px 28px;" data-i18n="a.terms">Xem Điều Khoản</a>
           </div>
         </div>
-        <div class="cdisplay">
-          <span class="cnum">30%</span>
-          <div class="clbl" data-i18n="a.rate">Tỷ Lệ Hoa Hồng</div>
-          <div class="csub" data-i18n="a.rsub">Cho mỗi lượt giới thiệu thành công</div>
+        <div class="commission-display">
+          <span class="commission-num">30%</span>
+          <div class="commission-label" data-i18n="a.rate">Tỷ Lệ Hoa Hồng</div>
+          <div class="commission-sub" data-i18n="a.rsub">Cho mỗi lượt giới thiệu thành công</div>
         </div>
       </div>
     </div>
-    <div class="asteps">
-      <div class="astep reveal"><div class="astep-n">1</div><div class="astep-ico">✉️</div><h3 data-i18n="s1.t">Đăng Ký Qua Email</h3><p data-i18n="s1.d">Gửi email giới thiệu nền tảng, quy mô khán giả và cách bạn dự định quảng bá sản phẩm. Chúng tôi phản hồi trong 48 giờ.</p></div>
-      <div class="astep reveal d1"><div class="astep-n">2</div><div class="astep-ico">🔗</div><h3 data-i18n="s2.t">Nhận Link Của Bạn</h3><p data-i18n="s2.d">Nhận link theo dõi tùy chỉnh cho cả 5 sản phẩm. Chia sẻ trên YouTube, blog, TikTok, Instagram — bất cứ nơi nào khán giả của bạn.</p></div>
-      <div class="astep reveal d2"><div class="astep-n">3</div><div class="astep-ico">💰</div><h3 data-i18n="s3.t">Nhận Hoa Hồng</h3><p data-i18n="s3.d">Kiếm tới 30% cho mỗi đơn hàng từ link của bạn. Thanh toán hàng tháng, theo dõi minh bạch, không ngưỡng tối thiểu.</p></div>
+    <div class="affiliate-steps">
+      <div class="step-card reveal">
+        <div class="step-num">1</div>
+        <div class="step-icon">✉️</div>
+        <h3 data-i18n="s1.t">Đăng Ký Qua Email</h3>
+        <p data-i18n="s1.d">Gửi email giới thiệu nền tảng, quy mô khán giả và cách bạn dự định quảng bá sản phẩm. Chúng tôi phản hồi trong 48 giờ.</p>
+      </div>
+      <div class="step-card reveal d1">
+        <div class="step-num">2</div>
+        <div class="step-icon">🔗</div>
+        <h3 data-i18n="s2.t">Nhận Link Của Bạn</h3>
+        <p data-i18n="s2.d">Nhận link theo dõi tùy chỉnh cho cả 5 sản phẩm. Chia sẻ trên YouTube, blog, TikTok, Instagram — bất cứ nơi nào khán giả của bạn.</p>
+      </div>
+      <div class="step-card reveal d2">
+        <div class="step-num">3</div>
+        <div class="step-icon">💰</div>
+        <h3 data-i18n="s3.t">Nhận Hoa Hồng</h3>
+        <p data-i18n="s3.d">Kiếm tới 30% cho mỗi đơn hàng từ link của bạn. Thanh toán hàng tháng, theo dõi minh bạch, không ngưỡng tối thiểu.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -440,26 +965,38 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
 <!-- ══ PARTNERSHIP ══ -->
 <section id="partnership">
   <div class="wrap">
-    <div class="ptgrid">
+    <div class="partnership-grid">
       <div>
-        <div class="slabel reveal" data-i18n="pt.label">Hợp Tác</div>
+        <div class="section-label reveal" data-i18n="pt.label">Hợp Tác</div>
         <h2 class="reveal d1" style="margin-bottom:20px;" data-i18n-html="pt.h2">Hãy cùng nhau<br/><em>xây dựng điều gì đó.</em></h2>
-        <p style="color:var(--muted);margin-bottom:48px;line-height:1.7;" class="reveal d2" data-i18n="pt.desc">Chúng tôi tích cực tìm kiếm đối tác chiến lược với các trường ngôn ngữ, nhà sáng tạo nội dung và công ty công nghệ có cùng tầm nhìn giúp giáo dục tiếng Nhật trở nên tiếp cận và mạnh mẽ hơn.</p>
-        <div class="ptcards">
-          <div class="ptcard reveal"><div class="ptcard-hd"><span style="font-size:28px;">🏫</span><h3 data-i18n="pc1.t">Trường Ngôn Ngữ & Học Viện</h3></div><p data-i18n="pc1.d">Tích hợp bộ đề AI vào chương trình giảng dạy. Mức giá cấp phép đặc biệt dành cho các cơ sở giáo dục.</p></div>
-          <div class="ptcard reveal d1"><div class="ptcard-hd"><span style="font-size:28px;">🎥</span><h3 data-i18n="pc2.t">Nhà Sáng Tạo Nội Dung & KOL</h3></div><p data-i18n="pc2.d">YouTuber, blogger, nhà sáng tạo mạng xã hội về Nhật Bản — chúng tôi sẽ tạo chiến dịch tùy chỉnh phục vụ khán giả của bạn.</p></div>
-          <div class="ptcard reveal d2"><div class="ptcard-hd"><span style="font-size:28px;">💼</span><h3 data-i18n="pc3.t">Doanh Nghiệp & B2B</h3></div><p data-i18n="pc3.d">Trang bị cho nhân viên của bạn chuẩn bị JLPT chuyên nghiệp trước khi sang Nhật. Cấp phép theo số lượng.</p></div>
-          <div class="ptcard reveal d3"><div class="ptcard-hd"><span style="font-size:28px;">🌐</span><h3 data-i18n="pc4.t">Nền Tảng & App Store</h3></div><p data-i18n="pc4.d">Đối tác phân phối, gói bundle và cơ hội vị trí nổi bật cho các sản phẩm iOS và web của chúng tôi.</p></div>
+        <p style="color:var(--text2);margin-bottom:44px;line-height:1.8;font-size:16px;" class="reveal d2" data-i18n="pt.desc">Chúng tôi tích cực tìm kiếm đối tác chiến lược với các trường ngôn ngữ, nhà sáng tạo nội dung và công ty công nghệ có cùng tầm nhìn giúp giáo dục tiếng Nhật trở nên tiếp cận và mạnh mẽ hơn.</p>
+        <div class="partner-cards">
+          <div class="partner-card reveal">
+            <div class="partner-card-header"><span class="partner-icon">🏫</span><h3 data-i18n="pc1.t">Trường Ngôn Ngữ & Học Viện</h3></div>
+            <p data-i18n="pc1.d">Tích hợp bộ đề AI vào chương trình giảng dạy. Mức giá cấp phép đặc biệt dành cho các cơ sở giáo dục.</p>
+          </div>
+          <div class="partner-card reveal d1">
+            <div class="partner-card-header"><span class="partner-icon">🎥</span><h3 data-i18n="pc2.t">Nhà Sáng Tạo Nội Dung & KOL</h3></div>
+            <p data-i18n="pc2.d">YouTuber, blogger, nhà sáng tạo mạng xã hội về Nhật Bản — chúng tôi sẽ tạo chiến dịch tùy chỉnh phục vụ khán giả của bạn.</p>
+          </div>
+          <div class="partner-card reveal d2">
+            <div class="partner-card-header"><span class="partner-icon">💼</span><h3 data-i18n="pc3.t">Doanh Nghiệp & B2B</h3></div>
+            <p data-i18n="pc3.d">Trang bị cho nhân viên của bạn chuẩn bị JLPT chuyên nghiệp trước khi sang Nhật. Cấp phép theo số lượng.</p>
+          </div>
+          <div class="partner-card reveal d3">
+            <div class="partner-card-header"><span class="partner-icon">🌐</span><h3 data-i18n="pc4.t">Nền Tảng & App Store</h3></div>
+            <p data-i18n="pc4.d">Đối tác phân phối, gói bundle và cơ hội vị trí nổi bật cho các sản phẩm iOS và web của chúng tôi.</p>
+          </div>
         </div>
       </div>
       <div>
-        <div class="ptbox reveal">
+        <div class="contact-box reveal">
           <h3 data-i18n-html="pt.form.t">Bắt đầu cuộc trò chuyện <em>hợp tác</em></h3>
           <p data-i18n="pt.form.d">Kể cho chúng tôi nghe về khán giả, nền tảng và mục tiêu của bạn. Chúng tôi sẽ tạo ra sự hợp tác phù hợp cho cả hai bên.</p>
           <form onsubmit="handleForm(event)">
-            <div class="ig"><input type="text" id="fi-name" data-i18n-ph="form.name" placeholder="Tên của bạn" required /></div>
-            <div class="ig"><input type="email" id="fi-email" data-i18n-ph="form.email" placeholder="Địa chỉ email" required /></div>
-            <div class="ig">
+            <div class="form-group"><input type="text" id="fi-name" data-i18n-ph="form.name" placeholder="Tên của bạn" required /></div>
+            <div class="form-group"><input type="email" id="fi-email" data-i18n-ph="form.email" placeholder="Địa chỉ email" required /></div>
+            <div class="form-group">
               <select id="fi-type">
                 <option value="" disabled selected data-i18n-opt="form.type">Loại hợp tác</option>
                 <option data-i18n-opt="opt1">Trường Ngôn Ngữ / Học Viện</option>
@@ -470,10 +1007,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
                 <option data-i18n-opt="opt6">Khác</option>
               </select>
             </div>
-            <div class="ig"><textarea id="fi-msg" data-i18n-ph="form.msg" placeholder="Kể cho chúng tôi nghe về khán giả và mục tiêu của bạn..."></textarea></div>
-            <button type="submit" id="formBtn" class="btn-p" style="width:100%;justify-content:center;border:none;cursor:none;">
+            <div class="form-group"><textarea id="fi-msg" data-i18n-ph="form.msg" placeholder="Kể cho chúng tôi nghe về khán giả và mục tiêu của bạn..."></textarea></div>
+            <button type="submit" id="formBtn" class="btn-submit">
               <span data-i18n="form.submit">Gửi Yêu Cầu</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
           </form>
         </div>
@@ -483,17 +1020,41 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
 </section>
 
 <!-- ══ TESTIMONIALS ══ -->
-<section id="social-proof" style="background:var(--bg);">
+<section id="testimonials" style="background:var(--white);">
   <div class="wrap">
-    <div style="text-align:center;margin-bottom:70px;" class="reveal">
-      <div class="slabel" style="justify-content:center;margin:0 auto 16px;" data-i18n="t.label">Câu Chuyện Học Viên</div>
+    <div class="testi-header reveal">
+      <div class="section-label" style="justify-content:center;margin:0 auto 16px;" data-i18n="t.label">Câu Chuyện Học Viên</div>
       <h2 data-i18n="t.h2">Học viên nói gì về chúng tôi</h2>
-      <p style="color:var(--muted);margin-top:16px;font-size:16px;" data-i18n="t.sub">Hàng nghìn học viên tin tưởng Coview-Education cho hành trình tiếng Nhật của họ</p>
+      <p data-i18n="t.sub">Hàng nghìn học viên tin tưởng Coview-Education cho hành trình tiếng Nhật của họ</p>
     </div>
-    <div class="tgrid">
-      <div class="tcard reveal"><div class="tstars">★★★★★</div><p class="ttxt" data-i18n="t1.txt">Các bài thi AI N1 cực kỳ thách thức và thực tế. Tôi đã vượt qua JLPT N1 ngay lần đầu tiên chỉ sau 3 tháng luyện tập nhất quán với công cụ này.</p><div class="tauthor"><div class="tavatar">T</div><div><div class="tname">Takeshi R.</div><div class="tmeta" data-i18n="t1.mt">Đã Vượt JLPT N1 · Tokyo</div></div></div></div>
-      <div class="tcard reveal d1"><div class="tstars">★★★★★</div><p class="ttxt" data-i18n="t2.txt">Japanese.With.Fuji khác với bất kỳ ứng dụng nào tôi từng dùng. Các cuộc trò chuyện với nhân vật AI rất tự nhiên và hệ thống XP khiến tôi học mỗi ngày.</p><div class="tauthor"><div class="tavatar">S</div><div><div class="tname">Sarah K.</div><div class="tmeta" data-i18n="t2.mt">Học Viên N3 · Hoa Kỳ</div></div></div></div>
-      <div class="tcard reveal d2"><div class="tstars">★★★★★</div><p class="ttxt" data-i18n="t3.txt">Cuối cùng cũng có một công cụ coi trọng bảo mật. Biết rằng AI chạy hoàn toàn trên iPhone mà không có dữ liệu nào rời khỏi thiết bị khiến tôi hoàn toàn tin tưởng.</p><div class="tauthor"><div class="tavatar">M</div><div><div class="tname">Marc D.</div><div class="tmeta" data-i18n="t3.mt">Người Dùng FujiChat · Pháp</div></div></div></div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" data-i18n="t1.txt">Các bài thi AI N1 cực kỳ thách thức và thực tế. Tôi đã vượt qua JLPT N1 ngay lần đầu tiên chỉ sau 3 tháng luyện tập nhất quán với công cụ này.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">T</div>
+          <div><div class="testi-name">Takeshi R.</div><div class="testi-meta" data-i18n="t1.mt">Đã Vượt JLPT N1 · Tokyo</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d1">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" data-i18n="t2.txt">Japanese.With.Fuji khác với bất kỳ ứng dụng nào tôi từng dùng. Các cuộc trò chuyện với nhân vật AI rất tự nhiên và hệ thống XP khiến tôi học mỗi ngày.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">S</div>
+          <div><div class="testi-name">Sarah K.</div><div class="testi-meta" data-i18n="t2.mt">Học Viên N3 · Hoa Kỳ</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal d2">
+        <div class="testi-quote">"</div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text" data-i18n="t3.txt">Cuối cùng cũng có một công cụ coi trọng bảo mật. Biết rằng AI chạy hoàn toàn trên iPhone mà không có dữ liệu nào rời khỏi thiết bị khiến tôi hoàn toàn tin tưởng.</p>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div><div class="testi-name">Marc D.</div><div class="testi-meta" data-i18n="t3.mt">Người Dùng FujiChat · Pháp</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -501,35 +1062,41 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
 <!-- ══ CTA ══ -->
 <section id="cta">
   <div class="cta-inner reveal">
-    <div class="slabel" style="justify-content:center;margin:0 auto 24px;" data-i18n="cta.label">Bắt Đầu Ngay Hôm Nay</div>
+    <div class="section-label" style="justify-content:center;margin:0 auto 24px;">Bắt Đầu Ngay Hôm Nay</div>
     <h2 data-i18n-html="cta.h2">Hành trình tiếng Nhật của bạn<br/><em>bắt đầu từ đây.</em></h2>
     <p data-i18n="cta.desc">Tham gia cùng hàng nghìn học viên đang sử dụng Coview-Education để chuẩn bị cho JLPT và đạt được thông thạo tiếng Nhật.</p>
-    <div class="cta-acts">
-      <a href="#products" class="btn-p"><span data-i18n="cta.b1">Khám Phá Tất Cả Sản Phẩm</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      <a href="mailto:covieworganization.fujichat@proton.me" class="btn-s" data-i18n="cta.b2">Liên Hệ Chúng Tôi</a>
+    <div class="cta-actions">
+      <a href="#products" class="btn-cta-primary">
+        <span data-i18n="cta.b1">Khám Phá Tất Cả Sản Phẩm</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="mailto:covieworganization.fujichat@proton.me" class="btn-cta-secondary" data-i18n="cta.b2">Liên Hệ Chúng Tôi</a>
     </div>
   </div>
 </section>
 
 <!-- ══ FOOTER ══ -->
 <footer>
-  <div class="fgrid">
-    <div class="fbrand">
-      <div class="flogo"><div class="flogo-mark">学</div><div class="flogo-txt">Coview<span>-Education</span></div></div>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="footer-logo">
+        <div class="footer-logo-mark">学</div>
+        <div class="footer-logo-text">Coview<span>-Education</span></div>
+      </a>
       <p data-i18n="ft.brand">Công cụ học tiếng Nhật AI hàng đầu. Được xây dựng bởi người học, dành cho người học. Mỗi sản phẩm được chế tác với sự quan tâm, trí tuệ và bảo mật làm cốt lõi.</p>
-      <div style="margin-top:24px;"><a href="mailto:covieworganization.fujichat@proton.me" style="width:36px;height:36px;border:1px solid var(--border);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;" title="Email">✉️</a></div>
+      <a href="mailto:covieworganization.fujichat@proton.me" class="footer-email-btn">✉️ &nbsp;covieworganization.fujichat@proton.me</a>
     </div>
-    <div class="fcol">
+    <div class="footer-col">
       <h4 data-i18n="ft.c1">Sản Phẩm</h4>
       <ul>
-        <li><a href="https://drtuan94.github.io/FujiChat-Play/" target="_blank">Japanese.With.Fuji</a></li>
-        <li><a href="https://drtuan94.github.io/Anki-N1-JLPT-Test-AI-powered/" target="_blank">JLPT N1 Test</a></li>
-        <li><a href="https://drtuan94.github.io/Anki-N2-JLPT-Test-Ai-Powered/" target="_blank">JLPT N2 Test</a></li>
-        <li><a href="https://drtuan94.github.io/Anki-N3-JLPT-Test-AI-Powered/" target="_blank">JLPT N3 Test</a></li>
-        <li><a href="https://drtuan94.github.io/Anki-N4-N5-JLPT-Test-AI-Powered/" target="_blank">JLPT N4–N5 Test</a></li>
+        <li><a href="https://drtuan94.github.io/FujiChat-Play/" target="_blank" rel="noopener">Japanese.With.Fuji</a></li>
+        <li><a href="https://drtuan94.github.io/Anki-N1-JLPT-Test-AI-powered/" target="_blank" rel="noopener">JLPT N1 Test</a></li>
+        <li><a href="https://drtuan94.github.io/Anki-N2-JLPT-Test-Ai-Powered/" target="_blank" rel="noopener">JLPT N2 Test</a></li>
+        <li><a href="https://drtuan94.github.io/Anki-N3-JLPT-Test-AI-Powered/" target="_blank" rel="noopener">JLPT N3 Test</a></li>
+        <li><a href="https://drtuan94.github.io/Anki-N4-N5-JLPT-Test-AI-Powered/" target="_blank" rel="noopener">JLPT N4–N5 Test</a></li>
       </ul>
     </div>
-    <div class="fcol">
+    <div class="footer-col">
       <h4 data-i18n="ft.c2">Chương Trình</h4>
       <ul>
         <li><a href="#affiliate" data-i18n="ft.aff">Chương Trình Affiliate</a></li>
@@ -538,44 +1105,125 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 48p
         <li><a href="mailto:covieworganization.fujichat@proton.me?subject=School" data-i18n="ft.school">Cấp Phép Trường Học</a></li>
       </ul>
     </div>
-    <div class="fcol">
+    <div class="footer-col">
       <h4 data-i18n="ft.c3">Hỗ Trợ</h4>
       <ul>
-        <li><a href="https://drtuan94.github.io/FujiChat-Play/" target="_blank" data-i18n="ft.appsup">Hỗ Trợ Ứng Dụng</a></li>
+        <li><a href="https://drtuan94.github.io/FujiChat-Play/" target="_blank" rel="noopener" data-i18n="ft.appsup">Hỗ Trợ Ứng Dụng</a></li>
         <li><a href="mailto:covieworganization.fujichat@proton.me" data-i18n="ft.contact">Liên Hệ</a></li>
-        <li><a href="https://drtuan94.github.io/FujiChat-Play/#privacy" data-i18n="ft.priv">Chính Sách Bảo Mật</a></li>
-        <li><a href="https://drtuan94.github.io/FujiChat-Play/#terms" data-i18n="ft.terms">Điều Khoản Sử Dụng</a></li>
+        <li><a href="https://drtuan94.github.io/FujiChat-Play/#privacy" target="_blank" rel="noopener" data-i18n="ft.priv">Chính Sách Bảo Mật</a></li>
+        <li><a href="https://drtuan94.github.io/FujiChat-Play/#terms" target="_blank" rel="noopener" data-i18n="ft.terms">Điều Khoản Sử Dụng</a></li>
       </ul>
     </div>
   </div>
-  <div class="fbot">
+  <div class="footer-bottom">
     <div data-i18n="ft.copy">© 2026 CoviewOrganization · Coview-Education. Bảo lưu mọi quyền.</div>
-    <div class="fbot-links">
-      <a href="https://drtuan94.github.io/FujiChat-Play/#privacy" data-i18n="ft.priv2">Bảo Mật</a>
-      <a href="https://drtuan94.github.io/FujiChat-Play/#terms" data-i18n="ft.terms2">Điều Khoản</a>
+    <div class="footer-bottom-links">
+      <a href="https://drtuan94.github.io/FujiChat-Play/#privacy" target="_blank" rel="noopener" data-i18n="ft.priv2">Bảo Mật</a>
+      <a href="https://drtuan94.github.io/FujiChat-Play/#terms" target="_blank" rel="noopener" data-i18n="ft.terms2">Điều Khoản</a>
       <a href="mailto:covieworganization.fujichat@proton.me" data-i18n="ft.con2">Liên Hệ</a>
     </div>
   </div>
 </footer>
 
-<!-- ══════════ SCRIPT ══════════ -->
 <script>
-/* ─── TRANSLATIONS ─── */
+/* ══ SAKURA PETALS ══ */
+(function() {
+  const canvas = document.getElementById('sakura-canvas');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
+
+  const PETAL_COUNT = 28;
+  const petals = [];
+
+  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function createPetal() {
+    return {
+      x: randomBetween(-20, W + 20),
+      y: randomBetween(-H, 0),
+      size: randomBetween(6, 14),
+      speedY: randomBetween(0.8, 2.2),
+      speedX: randomBetween(-0.5, 0.5),
+      rotation: randomBetween(0, Math.PI * 2),
+      rotSpeed: randomBetween(-0.02, 0.02),
+      opacity: randomBetween(0.3, 0.7),
+      sway: randomBetween(0.3, 1.0),
+      swayPhase: randomBetween(0, Math.PI * 2),
+      swaySpeed: randomBetween(0.008, 0.02),
+    };
+  }
+
+  for (let i = 0; i < PETAL_COUNT; i++) {
+    const p = createPetal();
+    p.y = randomBetween(0, H); // scatter initially
+    petals.push(p);
+  }
+
+  function drawPetal(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.globalAlpha = p.opacity;
+    ctx.beginPath();
+    // 5-petal sakura shape (approximate)
+    for (let i = 0; i < 5; i++) {
+      const angle = (i * Math.PI * 2) / 5 - Math.PI / 2;
+      const x1 = Math.cos(angle) * p.size;
+      const y1 = Math.sin(angle) * p.size;
+      const cx1 = Math.cos(angle - 0.3) * p.size * 0.5;
+      const cy1 = Math.sin(angle - 0.3) * p.size * 0.5;
+      const cx2 = Math.cos(angle + 0.3) * p.size * 0.5;
+      const cy2 = Math.sin(angle + 0.3) * p.size * 0.5;
+      if (i === 0) ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(cx1, cy1, x1, y1);
+      ctx.quadraticCurveTo(cx2, cy2, 0, 0);
+    }
+    const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size);
+    grad.addColorStop(0, '#fce4ea');
+    grad.addColorStop(0.5, '#f7c5cb');
+    grad.addColorStop(1, '#f0a0ad');
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach(p => {
+      p.swayPhase += p.swaySpeed;
+      p.x += p.speedX + Math.sin(p.swayPhase) * p.sway;
+      p.y += p.speedY;
+      p.rotation += p.rotSpeed;
+      if (p.y > H + 20 || p.x < -40 || p.x > W + 40) {
+        Object.assign(p, createPetal());
+        p.y = -20;
+        p.x = randomBetween(-20, W + 20);
+      }
+      drawPetal(p);
+    });
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ══ TRANSLATIONS ══ */
 const T = {
 vi:{
   "nav.products":"Sản Phẩm","nav.features":"Tính Năng","nav.affiliate":"Tiếp Thị","nav.partner":"Đối Tác","nav.cta":"Tham Gia Affiliate",
   "hero.eyebrow":"Học Tiếng Nhật Bằng AI Thế Hệ Mới",
-  "hero.h1":`Chinh phục<br/>tiếng Nhật theo<br/><span class="line-red"><em>cách thông minh</em></span>`,
+  "hero.h1":`Chinh phục<br/>tiếng Nhật theo<br/><em><span class="accent">cách thông minh</span></em>`,
   "hero.sub":"Bộ công cụ AI hàng đầu cho luyện thi JLPT và học tiếng Nhật toàn diện. Được xây dựng cho người học nghiêm túc, vận hành bởi trí tuệ nhân tạo thế hệ mới.",
   "hero.cta1":"Khám Phá Sản Phẩm","hero.cta2":"Kiếm Tiền Với Affiliate",
-  "hero.s1":"Sản Phẩm AI","hero.s2":"Toàn Cấp JLPT","hero.s3":"Câu Hỏi AI","hero.s4":"AI Bảo Mật Tuyệt Đối",
+  "hero.s1":"Sản Phẩm AI","hero.s2":"Toàn Cấp JLPT","hero.s3":"Câu Hỏi AI","hero.s4":"Bảo Mật Tuyệt Đối",
   "products.label":"Sản Phẩm","products.h2":`Mọi công cụ bạn cần<br/><em>để chinh phục tiếng Nhật</em>`,
   "products.desc":"Từ người mới bắt đầu đến thí sinh JLPT cấp cao — bộ công cụ AI của chúng tôi bao phủ mọi cấp độ trong hành trình học tiếng Nhật của bạn.",
   "p.fuji":"Trải nghiệm học tiếng Nhật gamified hoàn toàn, được hỗ trợ bởi Apple Intelligence chạy hoàn toàn trên thiết bị. Chat với nhân vật AI, tích lũy XP, thăng hạng và chinh phục tiếng Nhật — bảo mật 100%.",
-  "p.n45":"Bắt đầu hành trình JLPT với bài thi AI cho cấp N4 và N5. Phù hợp cho người mới bắt đầu và học viên trung cấp bước vào thế giới năng lực tiếng Nhật.",
-  "p.n3":"Nâng cấp lên N3 với các câu hỏi AI động nhắm vào điểm yếu của bạn, củng cố ngữ pháp, từ vựng và khả năng đọc hiểu.",
-  "p.n2":"Luyện thi N2 nâng cao với tiếng Nhật kinh doanh, cấu trúc ngữ pháp phức tạp và các bài đọc hiểu tinh tế.",
-  "p.n1":"Thử thách N1 tối thượng. Chinh phục tiếng Nhật trình độ bản ngữ với động cơ AI tiên tiến nhất, bao gồm văn học, ngữ pháp trừu tượng và đọc hiểu chuyên gia.",
+  "p.n45":"Bắt đầu hành trình JLPT với bài thi AI cho cấp N4 và N5. Phù hợp cho người mới bắt đầu và học viên trung cấp.",
+  "p.n3":"Nâng cấp lên N3 với các câu hỏi AI động nhắm vào điểm yếu của bạn, củng cố ngữ pháp, từ vựng và đọc hiểu.",
+  "p.n2":"Luyện thi N2 nâng cao với tiếng Nhật kinh doanh, cấu trúc ngữ pháp phức tạp và bài đọc hiểu tinh tế.",
+  "p.n1":"Thử thách N1 tối thượng. Chinh phục tiếng Nhật trình độ bản ngữ với bộ đề AI tiên tiến nhất, văn học, ngữ pháp trừu tượng và đọc hiểu chuyên gia.",
   "p.explore":"Khám Phá Ứng Dụng","p.test":"Luyện Thi Ngay",
   "pill.priv":"Bảo Mật On-Device","pill.adapt":"Thích Ứng","pill.adv":"Nâng Cao","pill.elite":"Trình Độ Tinh Anh","badge.elite":"Đỉnh Cao",
   "f.label":"Tại Sao Chọn Chúng Tôi","f.h2":`Khác biệt hoàn toàn.<br/><em>Được thiết kế để thắng.</em>`,
@@ -605,36 +1253,36 @@ vi:{
   "t1.txt":"Các bài thi AI N1 cực kỳ thách thức và thực tế. Tôi đã vượt qua JLPT N1 ngay lần đầu tiên chỉ sau 3 tháng luyện tập nhất quán với công cụ này.","t1.mt":"Đã Vượt JLPT N1 · Tokyo",
   "t2.txt":"Japanese.With.Fuji khác với bất kỳ ứng dụng nào tôi từng dùng. Các cuộc trò chuyện với nhân vật AI rất tự nhiên và hệ thống XP khiến tôi học mỗi ngày.","t2.mt":"Học Viên N3 · Hoa Kỳ",
   "t3.txt":"Cuối cùng cũng có một công cụ coi trọng bảo mật. Biết rằng AI chạy hoàn toàn trên iPhone mà không có dữ liệu nào rời khỏi thiết bị khiến tôi hoàn toàn tin tưởng.","t3.mt":"Người Dùng FujiChat · Pháp",
-  "cta.label":"Bắt Đầu Ngay Hôm Nay","cta.h2":`Hành trình tiếng Nhật của bạn<br/><em>bắt đầu từ đây.</em>`,
+  "cta.h2":`Hành trình tiếng Nhật của bạn<br/><em>bắt đầu từ đây.</em>`,
   "cta.desc":"Tham gia cùng hàng nghìn học viên đang sử dụng Coview-Education để chuẩn bị cho JLPT và đạt được thông thạo tiếng Nhật.",
   "cta.b1":"Khám Phá Tất Cả Sản Phẩm","cta.b2":"Liên Hệ Chúng Tôi",
-  "ft.brand":"Công cụ học tiếng Nhật AI hàng đầu. Được xây dựng bởi người học, dành cho người học. Mỗi sản phẩm được chế tác với sự quan tâm, trí tuệ và bảo mật làm cốt lõi.",
+  "ft.brand":"Công cụ học tiếng Nhật AI hàng đầu. Được xây dựng bởi người học, dành cho người học.",
   "ft.c1":"Sản Phẩm","ft.c2":"Chương Trình","ft.c3":"Hỗ Trợ",
   "ft.aff":"Chương Trình Affiliate","ft.part":"Hợp Tác","ft.resell":"Đại Lý","ft.school":"Cấp Phép Trường Học",
   "ft.appsup":"Hỗ Trợ Ứng Dụng","ft.contact":"Liên Hệ","ft.priv":"Chính Sách Bảo Mật","ft.terms":"Điều Khoản Sử Dụng",
   "ft.copy":"© 2026 CoviewOrganization · Coview-Education. Bảo lưu mọi quyền.",
   "ft.priv2":"Bảo Mật","ft.terms2":"Điều Khoản","ft.con2":"Liên Hệ",
   "form.sent":"✓ Đã gửi! Chúng tôi sẽ liên hệ sớm.",
-  "marquee":["Luyện Thi JLPT N1","Đề AI Tự Động","Gamified Học Tập","Bảo Mật On-Device","Apple Intelligence","Tích Hợp Anki","Luyện Thi JLPT N2","Fuji AI Chat","Hệ Thống XP","Chất Lượng Cao Cấp"]
+  "marquee":["Luyện Thi JLPT N1","Đề AI Tự Động","Gamified Học Tập","Bảo Mật On-Device","Apple Intelligence","Tích Hợp Anki","Luyện Thi JLPT N2","Fuji AI Chat","Hệ Thống XP","Chất Lượng Cao Cấp","桜 Sakura Learning"]
 },
 en:{
   "nav.products":"Products","nav.features":"Features","nav.affiliate":"Affiliate","nav.partner":"Partners","nav.cta":"Join Affiliate",
   "hero.eyebrow":"AI-Powered Japanese Education",
-  "hero.h1":`Master Japanese<br/>the <em>intelligent</em><br/><span class="line-red">way</span>`,
+  "hero.h1":`Master Japanese<br/>the <em><span class="accent">intelligent</span></em><br/>way`,
   "hero.sub":"Premium AI-powered tools for JLPT preparation and Japanese language mastery. Built for serious learners, powered by next-generation artificial intelligence.",
   "hero.cta1":"Explore Products","hero.cta2":"Earn as Affiliate",
-  "hero.s1":"AI Products","hero.s2":"JLPT Coverage","hero.s3":"AI Questions","hero.s4":"On-Device AI Privacy",
+  "hero.s1":"AI Products","hero.s2":"JLPT Coverage","hero.s3":"AI Questions","hero.s4":"On-Device Privacy",
   "products.label":"Our Products","products.h2":`Every tool you need<br/><em>to conquer Japanese</em>`,
-  "products.desc":"From beginners to advanced JLPT candidates — our suite of AI-powered tools covers every level of your Japanese learning journey.",
-  "p.fuji":"A fully gamified Japanese learning experience powered by on-device Apple Intelligence. Chat with AI characters, earn XP, climb ranks, and master Japanese — all with 100% privacy. Your data never leaves your device.",
-  "p.n45":"Begin your JLPT journey with AI-powered N4 and N5 practice tests. Perfect for beginners and intermediates entering the world of Japanese proficiency.",
-  "p.n3":"Level up to N3 with dynamic AI-generated questions that adapt to your weak points and strengthen your grammar, vocabulary and reading comprehension.",
-  "p.n2":"Advanced N2 preparation with comprehensive coverage of business Japanese, complex grammar patterns, and nuanced reading passages.",
-  "p.n1":"The ultimate N1 challenge. Master native-level Japanese with our most advanced AI test engine, covering literary texts, abstract grammar, and expert-level comprehension.",
+  "products.desc":"From beginners to advanced JLPT candidates — our AI-powered tools cover every level of your Japanese learning journey.",
+  "p.fuji":"A fully gamified Japanese learning experience powered by on-device Apple Intelligence. Chat with AI characters, earn XP, climb ranks, and master Japanese — with 100% privacy. Your data never leaves your device.",
+  "p.n45":"Begin your JLPT journey with AI-powered N4 and N5 practice tests. Perfect for beginners and intermediates.",
+  "p.n3":"Level up to N3 with dynamic AI questions that adapt to your weak points and strengthen grammar, vocabulary and reading.",
+  "p.n2":"Advanced N2 preparation with business Japanese, complex grammar patterns, and nuanced reading passages.",
+  "p.n1":"The ultimate N1 challenge. Master native-level Japanese with literary texts, abstract grammar, and expert-level comprehension.",
   "p.explore":"Explore App","p.test":"Start Testing",
   "pill.priv":"On-Device Privacy","pill.adapt":"Adaptive","pill.adv":"Advanced","pill.elite":"Elite Level","badge.elite":"Elite",
   "f.label":"Why Coview-Education","f.h2":`Built different.<br/><em>Designed to win.</em>`,
-  "f.desc":"We combine cutting-edge artificial intelligence with proven learning science to create tools that actually work. No filler. No fluff. Just results.",
+  "f.desc":"We combine cutting-edge AI with proven learning science to create tools that actually work. No filler. No fluff. Just results.",
   "f1.t":"Genuine AI Intelligence","f1.d":"Our JLPT tests use AI to generate unlimited unique questions. Never study the same test twice.",
   "f2.t":"Privacy First — On-Device AI","f2.d":"FujiChat runs entirely on your device using Apple Intelligence. Zero data leaves your phone. Ever.",
   "f3.t":"Gamified for Engagement","f3.d":"XP systems, pilot ranks, credits, and character interactions keep you motivated through your entire learning journey.",
@@ -644,124 +1292,99 @@ en:{
   "a.title":`Up to <em>30%</em> commission on every sale`,
   "a.desc":"Join the Coview-Education affiliate program and earn generous commissions by referring students to our premium Japanese learning tools. No cap on earnings — your audience, your income.",
   "a.apply":"Apply Now","a.terms":"View Terms","a.rate":"Commission Rate","a.rsub":"On every successful referral",
-  "s1.t":"Apply via Email","s1.d":"Send us a quick email with your platform, audience size, and how you plan to promote our products. We respond within 48 hours.",
+  "s1.t":"Apply via Email","s1.d":"Send us a quick email with your platform, audience size, and how you plan to promote. We respond within 48 hours.",
   "s2.t":"Get Your Links","s2.d":"Receive custom tracking links for all 5 products. Share on YouTube, blogs, TikTok, Instagram — wherever your audience lives.",
-  "s3.t":"Earn Commissions","s3.d":"Earn up to 30% on every sale attributed to your link. Monthly payouts, transparent tracking, no minimum threshold.",
+  "s3.t":"Earn Commissions","s3.d":"Earn up to 30% on every sale from your link. Monthly payouts, transparent tracking, no minimum threshold.",
   "pt.label":"Partnership","pt.h2":`Let's build<br/><em>something together.</em>`,
   "pt.desc":"We actively seek strategic partnerships with language schools, creators, and tech companies who share our vision of making Japanese education accessible and powerful.",
   "pc1.t":"Language Schools & Academies","pc1.d":"Integrate our AI test suite into your curriculum. Special licensing rates for educational institutions.",
-  "pc2.t":"Content Creators & Influencers","pc2.d":"Japan-focused YouTubers, bloggers, and social media creators — we'll create custom campaigns that serve your audience.",
+  "pc2.t":"Content Creators & Influencers","pc2.d":"Japan-focused YouTubers, bloggers, and social media creators — we'll create custom campaigns for your audience.",
   "pc3.t":"Corporate & B2B","pc3.d":"Equip your Japan-bound employees with professional JLPT preparation tools. Volume licensing available.",
-  "pc4.t":"App Stores & Platforms","pc4.d":"Distribution partnerships, bundle deals, and featured placement opportunities for our iOS and web products.",
+  "pc4.t":"App Stores & Platforms","pc4.d":"Distribution partnerships, bundle deals, and featured placement for our iOS and web products.",
   "pt.form.t":`Start a <em>partnership</em> conversation`,"pt.form.d":"Tell us about your audience, platform, and goals. We'll craft a tailored collaboration that works for both of us.",
   "form.name":"Your name","form.email":"Email address","form.type":"Partnership type","form.msg":"Tell us about your audience and goals...","form.submit":"Send Inquiry",
   "opt1":"Language School / Academy","opt2":"Content Creator / Influencer","opt3":"Corporate / B2B","opt4":"Platform / Distribution","opt5":"Affiliate Program","opt6":"Other",
   "t.label":"Learner Stories","t.h2":"What our students say","t.sub":"Thousands of learners trust Coview-Education for their Japanese journey",
-  "t1.txt":"The N1 AI tests are incredibly challenging and realistic. I passed my JLPT N1 on the first attempt after just 3 months of consistent practice with this tool.","t1.mt":"JLPT N1 Passer · Tokyo",
+  "t1.txt":"The N1 AI tests are incredibly challenging and realistic. I passed my JLPT N1 on the first attempt after just 3 months of consistent practice.","t1.mt":"JLPT N1 Passer · Tokyo",
   "t2.txt":"Japanese.With.Fuji is unlike any app I've used. The AI character conversations feel natural and the XP system kept me studying every single day.","t2.mt":"N3 Learner · United States",
   "t3.txt":"Finally, a tool that takes privacy seriously. Knowing all the AI runs on my iPhone with zero data leaving my device makes me trust this app completely.","t3.mt":"FujiChat User · France",
-  "cta.label":"Start Today","cta.h2":`Your Japanese mastery<br/><em>begins here.</em>`,
+  "cta.h2":`Your Japanese mastery<br/><em>begins here.</em>`,
   "cta.desc":"Join thousands of learners already using Coview-Education to prepare for JLPT and achieve Japanese fluency.",
   "cta.b1":"Explore All Products","cta.b2":"Contact Us",
-  "ft.brand":"Premium AI-powered Japanese learning tools. Built by learners, for learners. Every product is crafted with care, intelligence, and privacy at its core.",
+  "ft.brand":"Premium AI-powered Japanese learning tools. Built by learners, for learners.",
   "ft.c1":"Products","ft.c2":"Programs","ft.c3":"Support",
   "ft.aff":"Affiliate Program","ft.part":"Partnership","ft.resell":"Reseller Program","ft.school":"School Licensing",
   "ft.appsup":"App Support","ft.contact":"Contact Us","ft.priv":"Privacy Policy","ft.terms":"Terms of Use",
   "ft.copy":"© 2026 CoviewOrganization · Coview-Education. All rights reserved.",
   "ft.priv2":"Privacy","ft.terms2":"Terms","ft.con2":"Contact",
   "form.sent":"✓ Sent! We'll be in touch.",
-  "marquee":["JLPT N1 Preparation","AI-Generated Tests","Gamified Learning","On-Device Privacy","Apple Intelligence","Anki Integration","JLPT N2 Preparation","Fuji AI Chat","XP & Rewards","Premium Quality"]
+  "marquee":["JLPT N1 Preparation","AI-Generated Tests","Gamified Learning","On-Device Privacy","Apple Intelligence","Anki Integration","JLPT N2 Preparation","Fuji AI Chat","XP & Rewards","Premium Quality","🌸 Sakura Learning"]
 }
 };
 
-/* ─── APPLY LANGUAGE ─── */
 let lang = 'vi';
 
 function applyLang(l) {
   lang = l;
   const d = T[l];
   document.documentElement.lang = l;
-  document.title = l==='vi'
-    ? 'Coview-Education — Chinh Phục Tiếng Nhật với AI'
-    : 'Coview-Education — Master Japanese with AI';
-
-  // text
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const v = d[el.dataset.i18n]; if(v!==undefined) el.textContent = v;
-  });
-  // html
-  document.querySelectorAll('[data-i18n-html]').forEach(el => {
-    const v = d[el.dataset.i18nHtml]; if(v!==undefined) el.innerHTML = v;
-  });
-  // placeholders
-  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-    const v = d[el.dataset.i18nPh]; if(v!==undefined) el.placeholder = v;
-  });
-  // select options
-  document.querySelectorAll('[data-i18n-opt]').forEach(el => {
-    const v = d[el.dataset.i18nOpt]; if(v!==undefined) el.textContent = v;
-  });
-
-  // marquee
+  document.title = l==='vi' ? 'Coview-Education — Chinh Phục Tiếng Nhật với AI' : 'Coview-Education — Master Japanese with AI';
+  document.querySelectorAll('[data-i18n]').forEach(el => { const v = d[el.dataset.i18n]; if(v!==undefined) el.textContent = v; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { const v = d[el.dataset.i18nHtml]; if(v!==undefined) el.innerHTML = v; });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = d[el.dataset.i18nPh]; if(v!==undefined) el.placeholder = v; });
+  document.querySelectorAll('[data-i18n-opt]').forEach(el => { const v = d[el.dataset.i18nOpt]; if(v!==undefined) el.textContent = v; });
   buildMarquee(l);
-
-  // button UI
   document.getElementById('lFlag').textContent = l==='vi' ? '🇻🇳' : '🇬🇧';
   document.getElementById('lLabel').textContent = l==='vi' ? 'VI' : 'EN';
-
-  try { localStorage.setItem('ce_lang', l); } catch(e){}
+  try { localStorage.setItem('ce_lang', l); } catch(e) {}
 }
 
-function toggleLang() {
-  applyLang(lang==='vi' ? 'en' : 'vi');
-}
+function toggleLang() { applyLang(lang==='vi' ? 'en' : 'vi'); }
 
 function buildMarquee(l) {
   const items = T[l].marquee;
   const track = document.getElementById('mtrack');
-  // double for seamless loop
   track.innerHTML = [...items,...items].map(t =>
-    `<span class="mitem"><span class="dot"></span>${t}</span>`
+    `<span class="marquee-item"><span class="dot"></span>${t}</span>`
   ).join('');
 }
 
-// init
 (function(){
   let s='vi'; try{s=localStorage.getItem('ce_lang')||'vi';}catch(e){}
   applyLang(s);
 })();
 
-/* ─── CURSOR ─── */
-const cur=document.getElementById('cursor'), ring=document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
-(function anim(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim); })();
+/* ══ NAV SCROLL ══ */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60);
+});
 
-/* ─── NAV SCROLL ─── */
-window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',scrollY>60); });
+/* ══ REVEAL ON SCROLL ══ */
+document.querySelectorAll('.reveal').forEach(el => {
+  new IntersectionObserver(([e]) => { if(e.isIntersecting) e.target.classList.add('visible'); }, { threshold:0.1 }).observe(el);
+});
 
-/* ─── REVEAL ─── */
-new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting)e.target.classList.add('visible'); }),{threshold:.1})
-  .observe && document.querySelectorAll('.reveal').forEach(el=>
-    new IntersectionObserver(([e])=>{ if(e.isIntersecting)e.target.classList.add('visible'); },{threshold:.1}).observe(el)
-  );
-
-/* ─── SMOOTH SCROLL ─── */
-document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
-  const t=document.querySelector(a.getAttribute('href')); if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+/* ══ SMOOTH SCROLL ══ */
+document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const t = document.querySelector(a.getAttribute('href'));
+  if(t) { e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
 }));
 
-/* ─── FORM ─── */
-function handleForm(e){
+/* ══ FORM ══ */
+function handleForm(e) {
   e.preventDefault();
-  const btn=document.getElementById('formBtn');
-  btn.innerHTML=T[lang]['form.sent'];
-  btn.style.cssText='background:rgba(61,217,235,.15);color:var(--cyan);border:1px solid rgba(61,217,235,.3);width:100%;justify-content:center;display:inline-flex;align-items:center;padding:15px 32px;border-radius:2px;font-family:Syne,sans-serif;font-size:13px;font-weight:700;';
-  setTimeout(()=>{
-    btn.innerHTML=`<span data-i18n="form.submit">${T[lang]['form.submit']}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
-    btn.style=''; e.target.reset();
-  },3000);
-  window.location.href='mailto:covieworganization.fujichat@proton.me?subject=Partnership%20Inquiry';
+  const btn = document.getElementById('formBtn');
+  const sent = T[lang]['form.sent'];
+  btn.innerHTML = sent;
+  btn.style.background = 'linear-gradient(135deg,rgba(247,197,203,0.3),rgba(247,197,203,0.1))';
+  btn.style.color = 'var(--sakura-deep)';
+  btn.style.border = '1.5px solid rgba(201,79,106,0.3)';
+  window.location.href = 'mailto:covieworganization.fujichat@proton.me?subject=Partnership%20Inquiry';
+  setTimeout(() => {
+    btn.innerHTML = `<span>${T[lang]['form.submit']}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+    btn.style = '';
+    e.target.reset();
+  }, 3000);
 }
 </script>
 </body>
